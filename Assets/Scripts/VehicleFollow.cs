@@ -20,7 +20,12 @@ public class VehicleFollow : MonoBehaviour
     float distanceOffset = 0;
 
     void LateUpdate()
-    {        
+    {
+        if (target == null)
+        {
+            return;
+        }
+
         Quaternion currentRotation = Quaternion.identity;
         if (enableFollowRotation)
         {

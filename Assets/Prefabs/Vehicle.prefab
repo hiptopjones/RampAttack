@@ -323,11 +323,11 @@ GameObject:
   - component: {fileID: 4274648903920639738}
   - component: {fileID: 4274648903920639739}
   - component: {fileID: 4274648903920639741}
-  - component: {fileID: 4274648903920639736}
   - component: {fileID: 4274648903920639740}
+  - component: {fileID: 1286427012}
   m_Layer: 0
   m_Name: Vehicle
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -377,7 +377,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.8869427, y: 0.5156021, z: 2.980434}
   m_Center: {x: 0.006075084, y: 0.9954934, z: -0.006074667}
---- !u!114 &4274648903920639736
+--- !u!65 &4274648903920639740
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4274648903920639737}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.48349166, z: 0.49523014}
+  m_Center: {x: 0, y: 1.502571, z: 0.4989005}
+--- !u!114 &1286427012
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -386,7 +399,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4274648903920639737}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50339f628479e5842b27df7cf0df5220, type: 3}
+  m_Script: {fileID: 11500000, guid: 42eb9d9226e0353488bb5e951ea07169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   centerOfMass: {x: 0, y: 0.5, z: 0}
@@ -403,19 +416,8 @@ MonoBehaviour:
   speed: 20
   pitchCorrectionTime: 5
   targetPitchAngle: 0
---- !u!65 &4274648903920639740
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4274648903920639737}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 0.48349166, z: 0.49523014}
-  m_Center: {x: 0, y: 1.502571, z: 0.4989005}
+  voxelPrefab: {fileID: 5702517189894727087, guid: f1dddbfbe38f9ad43a025109a363ab37,
+    type: 3}
 --- !u!1 &4274648904164753947
 GameObject:
   m_ObjectHideFlags: 0

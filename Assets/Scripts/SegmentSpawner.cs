@@ -12,7 +12,6 @@ public class SegmentSpawner : MonoBehaviour
     [SerializeField] GameObject[] rampPrefabs;
 
     [SerializeField] float spawnInterval = 2.5f;
-    [SerializeField] float timeToLive = 20;
     [SerializeField] float initialSpawnCount = 2;
     [SerializeField] float segmentLength = 75;
     [SerializeField] float archHeight = 3;
@@ -85,6 +84,7 @@ public class SegmentSpawner : MonoBehaviour
         }
 
         Vector3 rampPosition = segmentPosition - Vector3.forward * rampOffsets[numArches - 1];
+        //Vector3 rampPosition = segmentPosition - Vector3.forward * (rampOffsets[numArches - 1] - 5);
         SpawnObject(rampPrefabs[numArches - 1], rampPosition);
  
         for (int i = 0; i < 5; i++)

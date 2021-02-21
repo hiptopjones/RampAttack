@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DriveController : MonoBehaviour
+public class VehicleController : MonoBehaviour
 {
     [SerializeField] Vector3 centerOfMass;
     [SerializeField] WheelCollider[] wheelColliders;
@@ -12,11 +12,15 @@ public class DriveController : MonoBehaviour
     [SerializeField] float pitchCorrectionTime = 5;
     [SerializeField] float targetPitchAngle = 0;
 
+    [SerializeField] GameObject voxelPrefab;
+
     Rigidbody vehicleRigidbody;
 
     float lastSurfaceTime = 0;
 
     bool isRunning = false;
+
+    List<GameObject> particles;
 
     void Start()
     {
@@ -25,6 +29,8 @@ public class DriveController : MonoBehaviour
         // Increase stability
         vehicleRigidbody.centerOfMass = centerOfMass;
         vehicleRigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+
+        InitializeParticles();
     }
 
     void Update()
@@ -128,6 +134,37 @@ public class DriveController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("DriveController: OnTriggerEnter: " + other.name);
+        Debug.Log("VehicleController: OnTriggerEnter: " + other.name);
+
+        if (other.tag == "Obstacle")
+        {
+            foreach (GameObject particle in particles)
+            {
+                particle.transform.position = transform.position;
+                particle.SetActive(true);
+            }
+
+            GameSession gameSession = FindObjectOfType<GameSession>();
+            gameSession.PlayerDied();
+
+            Destroy(gameObject);
+        }
+    }
+
+    private void InitializeParticles()
+    {
+        particles = new List<GameObject>();
+
+        for (int i = 0; i < 100; i++)
+        {
+            Vector3 eulerAngles = new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
+            GameObject particle = Instantiate(voxelPrefab, transform.position, Quaternion.Euler(eulerAngles));
+            Rigidbody particleRigidbody = particle.GetComponent<Rigidbody>();
+            particleRigidbody.velocity = new Vector3(Random.Range(-20, 20), Random.Range(-20, 20), Random.Range(-20, 20));
+
+            particle.SetActive(false);
+
+            particles.Add(particle);
+        }
     }
 }

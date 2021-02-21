@@ -15,12 +15,15 @@ public class Coin : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        GameSession gameSession = FindObjectOfType<GameSession>();
-        gameSession.AddCoins(1);
+        if (other.CompareTag("Player"))
+        {
+            GameSession gameSession = FindObjectOfType<GameSession>();
+            gameSession.AddCoins(1);
 
-        GameObject particleEffect = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-        Destroy(particleEffect, explosionTimeToLive);
+            GameObject particleEffect = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+            Destroy(particleEffect, explosionTimeToLive);
 
-        Destroy(gameObject);
+            Destroy(gameObject);
+        }
     }
 }

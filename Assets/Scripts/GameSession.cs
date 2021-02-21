@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,15 +23,21 @@ public class GameSession : MonoBehaviour
 
     private void Start()
     {
-        ReadySetGoDisplay introDisplay = FindObjectOfType<ReadySetGoDisplay>();
+        IntroDisplay introDisplay = FindObjectOfType<IntroDisplay>();
         introDisplay.StartIntro();
     }
 
     // TODO: Use a proper event for this
     public void IntroComplete()
     {
-        DriveController driveController = FindObjectOfType<DriveController>();
-        driveController.StartDriving();
+        VehicleController vehicleController = FindObjectOfType<VehicleController>();
+        vehicleController.StartDriving();
+    }
+
+    public void PlayerDied()
+    {
+        SceneLoader sceneLoader = FindObjectOfType<SceneLoader>();
+        sceneLoader.LoadGameOverWithDelay();
     }
 
     public int GetTotalCoins()

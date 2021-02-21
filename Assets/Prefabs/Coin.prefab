@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 530795374733176080}
   - component: {fileID: 530795374733176081}
   - component: {fileID: 1356514176}
-  - component: {fileID: 8118268690172033008}
   m_Layer: 0
   m_Name: Coin
   m_TagString: Coin
@@ -47,6 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 0.75
+  explosionPrefab: {fileID: 2070965499049644864, guid: bd5b321847a170846b64f3d3f989f162,
+    type: 3}
+  explosionTimeToLive: 2
 --- !u!136 &1356514176
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -61,21 +63,6 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8118268690172033008
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 530795374733176083}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f7c446d791df6541bb74ec68ae90f16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  explosionPrefab: {fileID: 2070965499049644864, guid: bd5b321847a170846b64f3d3f989f162,
-    type: 3}
-  explosionTimeToLive: 2
 --- !u!1 &530795374794151182
 GameObject:
   m_ObjectHideFlags: 0
