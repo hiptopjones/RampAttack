@@ -10,8 +10,7 @@ public class SegmentSpawner : MonoBehaviour
     [SerializeField] GameObject archPrefab;
     [SerializeField] GameObject coinPrefab;
 
-    [SerializeField] float spawnInterval = 2.5f;
-    [SerializeField] float initialSpawnCount = 2;
+    [SerializeField] float spawnAheadDistance = 200;
     [SerializeField] float segmentLength = 75;
     [SerializeField] float archHeight = 3;
     [SerializeField] float archSpacing = 3;
@@ -25,12 +24,28 @@ public class SegmentSpawner : MonoBehaviour
     private bool isSpawning;
 
     ResourceManager resourceManager;
+    VehicleController vehicleController;
 
-    private void Start()
+    void Start()
     {
         resourceManager = FindObjectOfType<ResourceManager>();
+        vehicleController = FindObjectOfType<VehicleController>();
 
         StartSpawning();
+    }
+
+    void Update()
+    {
+        if (isSpawning)
+        {
+            Vector3 nextSegmentPosition = startSpawnPosition + Vector3.forward * numSegmentsSpawned * segmentLength;
+            Vector3 playerCurrentPosition = vehicleController.transform.position;
+
+            if (nextSegmentPosition.z - spawnAheadDistance < playerCurrentPosition.z)
+            {
+                SpawnSegment(nextSegmentPosition);
+            }
+        }
     }
 
     public void StartSpawning()
@@ -41,7 +56,8 @@ public class SegmentSpawner : MonoBehaviour
         }
 
         isSpawning = true;
-        StartCoroutine(SpawnSegments());
+
+        SpawnStartSegment();
     }
 
     public void StopSpawning()
@@ -54,22 +70,6 @@ public class SegmentSpawner : MonoBehaviour
         isSpawning = false;
     }
 
-    IEnumerator SpawnSegments()
-    {
-        SpawnStartSegment();
-
-        for (int i = 0; i < initialSpawnCount; i++)
-        {
-            SpawnSegment();
-        }
-
-        while (isSpawning)
-        {
-            yield return new WaitForSeconds(spawnInterval);
-            SpawnSegment();
-        }
-    }
-
     void SpawnStartSegment()
     {
         GameObject road = resourceManager.GetOrCreateRoad();
@@ -78,10 +78,8 @@ public class SegmentSpawner : MonoBehaviour
         numSegmentsSpawned++;
     }
 
-    void SpawnSegment()
+    void SpawnSegment(Vector3 segmentPosition)
     {
-        Vector3 segmentPosition = startSpawnPosition + Vector3.forward * numSegmentsSpawned * segmentLength;
-
         GameObject road = resourceManager.GetOrCreateRoad();
         road.transform.position = segmentPosition;
 

@@ -27,9 +27,8 @@ public class Coin : MonoBehaviour
             GameSession gameSession = FindObjectOfType<GameSession>();
             gameSession.AddCoins(1);
 
-            // TODO: Add this to the object pool
-            GameObject particleEffect = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-            Destroy(particleEffect, explosionTimeToLive);
+            GameObject coinEffect = resourceManager.GetOrCreateCoinEffect();
+            coinEffect.transform.position = transform.position;
 
             resourceManager.DestroyCoin(gameObject);
         }

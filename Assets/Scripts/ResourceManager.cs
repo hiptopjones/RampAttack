@@ -9,6 +9,7 @@ public enum ObjectType
     Road,
     Arch,
     Coin,
+    CoinEffect,
     SmallRamp,
     MediumRamp,
     LargeRamp
@@ -22,6 +23,7 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] GameObject roadPrefab;
     [SerializeField] GameObject archPrefab;
     [SerializeField] GameObject coinPrefab;
+    [SerializeField] GameObject coinEffectPrefab;
     [SerializeField] GameObject smallRampPrefab;
     [SerializeField] GameObject mediumRampPrefab;
     [SerializeField] GameObject largeRampPrefab;
@@ -40,6 +42,7 @@ public class ResourceManager : MonoBehaviour
         activeObjects[ObjectType.Road] = new HashSet<GameObject>();
         activeObjects[ObjectType.Arch] = new HashSet<GameObject>();
         activeObjects[ObjectType.Coin] = new HashSet<GameObject>();
+        activeObjects[ObjectType.CoinEffect] = new HashSet<GameObject>();
         activeObjects[ObjectType.SmallRamp] = new HashSet<GameObject>();
         activeObjects[ObjectType.MediumRamp] = new HashSet<GameObject>();
         activeObjects[ObjectType.LargeRamp] = new HashSet<GameObject>();
@@ -47,6 +50,7 @@ public class ResourceManager : MonoBehaviour
         freeObjects[ObjectType.Road] = new Stack<GameObject>();
         freeObjects[ObjectType.Arch] = new Stack<GameObject>();
         freeObjects[ObjectType.Coin] = new Stack<GameObject>();
+        freeObjects[ObjectType.CoinEffect] = new Stack<GameObject>();
         freeObjects[ObjectType.SmallRamp] = new Stack<GameObject>();
         freeObjects[ObjectType.MediumRamp] = new Stack<GameObject>();
         freeObjects[ObjectType.LargeRamp] = new Stack<GameObject>();
@@ -109,6 +113,11 @@ public class ResourceManager : MonoBehaviour
         DestroyObject(ObjectType.Coin, coin);
     }
 
+    public void DestroyCoinEffect(GameObject effect)
+    {
+        DestroyObject(ObjectType.CoinEffect, effect);
+    }
+
     public void DestroySmallRamp(GameObject ramp)
     {
         DestroyObject(ObjectType.SmallRamp, ramp);
@@ -144,6 +153,11 @@ public class ResourceManager : MonoBehaviour
     public GameObject GetOrCreateCoin()
     {
         return GetOrCreateObject(ObjectType.Coin);
+    }
+
+    public GameObject GetOrCreateCoinEffect()
+    {
+        return GetOrCreateObject(ObjectType.CoinEffect);
     }
 
     public GameObject GetOrCreateSmallRamp()
@@ -192,6 +206,9 @@ public class ResourceManager : MonoBehaviour
 
             case ObjectType.Coin:
                 return coinPrefab;
+
+            case ObjectType.CoinEffect:
+                return coinEffectPrefab;
 
             case ObjectType.SmallRamp:
                 return smallRampPrefab;
