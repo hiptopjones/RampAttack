@@ -5,16 +5,17 @@ using UnityEngine;
 public class GhostRamp : MonoBehaviour
 {
     [SerializeField] float ghostOffset;
-    [SerializeField] GameObject[] rampPrefabs;
 
     private MeshRenderer meshRenderer;
     private VehicleController vehicleController;
+    private ResourceManager resourceManager;
 
     private bool isRampPlaced = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        resourceManager = FindObjectOfType<ResourceManager>();
         meshRenderer = GetComponentInChildren<MeshRenderer>();
         vehicleController = FindObjectOfType<VehicleController>();
     }
@@ -33,26 +34,24 @@ public class GhostRamp : MonoBehaviour
         {
             if (vehicleController.IsGrounded())
             {
-                GameObject rampPrefab = null;
+                GameObject ramp = null;
 
                 if (Input.GetKeyDown(KeyCode.Alpha1))
                 {
-                    rampPrefab = rampPrefabs[0];
+                    ramp = resourceManager.GetOrCreateSmallRamp();
                 }
                 else if (Input.GetKeyDown(KeyCode.Alpha2))
                 {
-                    rampPrefab = rampPrefabs[1];
+                    ramp = resourceManager.GetOrCreateMediumRamp();
                 }
                 else if (Input.GetKeyDown(KeyCode.Alpha3))
                 {
-                    rampPrefab = rampPrefabs[2];
+                    ramp = resourceManager.GetOrCreateLargeRamp();
                 }
 
-                if (rampPrefab != null)
+                if (ramp != null)
                 {
-                    GameObject ramp = Instantiate(rampPrefab, transform.position, Quaternion.identity);
-                    Destroy(ramp, 10);
-
+                    ramp.transform.position = transform.position;
                     isRampPlaced = true;
                 }
                 else

@@ -9,7 +9,6 @@ public class SegmentSpawner : MonoBehaviour
     [SerializeField] GameObject roadPrefab;
     [SerializeField] GameObject archPrefab;
     [SerializeField] GameObject coinPrefab;
-    [SerializeField] GameObject[] rampPrefabs;
 
     [SerializeField] float spawnInterval = 2.5f;
     [SerializeField] float initialSpawnCount = 2;
@@ -18,7 +17,6 @@ public class SegmentSpawner : MonoBehaviour
     [SerializeField] float archSpacing = 3;
     [SerializeField] int maxArchesUp = 3;
     [SerializeField] int maxArchesDeep = 3;
-    [SerializeField] float[] rampOffsets;
     [SerializeField] float[] coinOffsets;
     [SerializeField] float numCoinsPerSegment = 5;
     [SerializeField] float coinSpacing = 4;
@@ -26,10 +24,12 @@ public class SegmentSpawner : MonoBehaviour
     private int numSegmentsSpawned = 0;
     private bool isSpawning;
 
-    Queue<GameObject> spawnedObjects = new Queue<GameObject>();
+    ResourceManager resourceManager;
 
     private void Start()
     {
+        resourceManager = FindObjectOfType<ResourceManager>();
+
         StartSpawning();
     }
 
@@ -72,14 +72,18 @@ public class SegmentSpawner : MonoBehaviour
 
     void SpawnStartSegment()
     {
-        SpawnObject(roadPrefab, startSpawnPosition);
+        GameObject road = resourceManager.GetOrCreateRoad();
+        road.transform.position = startSpawnPosition;
+
         numSegmentsSpawned++;
     }
 
     void SpawnSegment()
     {
         Vector3 segmentPosition = startSpawnPosition + Vector3.forward * numSegmentsSpawned * segmentLength;
-        SpawnObject(roadPrefab, segmentPosition);
+
+        GameObject road = resourceManager.GetOrCreateRoad();
+        road.transform.position = segmentPosition;
 
         int numArchesUp = Random.Range(1, maxArchesUp + 1);
         int numArchesDeep = Random.Range(1, maxArchesDeep + 1);
@@ -87,28 +91,19 @@ public class SegmentSpawner : MonoBehaviour
         {
             for (int y = 0; y < numArchesUp; y++)
             {
-                Vector3 archPosition = segmentPosition + (Vector3.up * y * archHeight) + (Vector3.forward * z * archSpacing);
-                SpawnObject(archPrefab, archPosition);
+                GameObject arch = resourceManager.GetOrCreateArch();
+                arch.transform.position = segmentPosition + (Vector3.up * y * archHeight) + (Vector3.forward * z * archSpacing);
             }
         }
-
-        //Vector3 rampPosition = segmentPosition - Vector3.forward * rampOffsets[numArches - 1];
-        //SpawnObject(rampPrefabs[numArches - 1], rampPosition);
 
         for (int i = 0; i < numCoinsPerSegment; i++)
         {
             float coinOffset = coinOffsets[numArchesUp - 1] + ((numArchesDeep - 1) * archSpacing) + (i * coinSpacing);
 
-            Vector3 coinPosition = segmentPosition + Vector3.forward * coinOffset;
-            SpawnObject(coinPrefab, coinPosition);
+            GameObject coin = resourceManager.GetOrCreateCoin();
+            coin.transform.position = segmentPosition + Vector3.forward * coinOffset;
         }
 
         numSegmentsSpawned++;
-    }
-
-    private void SpawnObject(GameObject prefab, Vector3 position)
-    {
-        GameObject obj = Instantiate(prefab, position, Quaternion.identity);
-        spawnedObjects.Enqueue(obj);
     }
 }

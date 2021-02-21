@@ -8,6 +8,13 @@ public class Coin : MonoBehaviour
     [SerializeField] GameObject explosionPrefab;
     [SerializeField] float explosionTimeToLive = 2;
 
+    ResourceManager resourceManager;
+
+    private void Start()
+    {
+        resourceManager = FindObjectOfType<ResourceManager>();
+    }
+
     void Update()
     {
         transform.Rotate(transform.up, 360 * rotationSpeed * Time.deltaTime);
@@ -20,10 +27,11 @@ public class Coin : MonoBehaviour
             GameSession gameSession = FindObjectOfType<GameSession>();
             gameSession.AddCoins(1);
 
+            // TODO: Add this to the object pool
             GameObject particleEffect = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
             Destroy(particleEffect, explosionTimeToLive);
 
-            Destroy(gameObject);
+            resourceManager.DestroyCoin(gameObject);
         }
     }
 }
