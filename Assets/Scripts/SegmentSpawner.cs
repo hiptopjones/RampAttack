@@ -83,9 +83,9 @@ public class SegmentSpawner : MonoBehaviour
             SpawnObject(archPrefab, archPosition);
         }
 
-        Vector3 rampPosition = segmentPosition - Vector3.forward * rampOffsets[numArches - 1];
-        //Vector3 rampPosition = segmentPosition - Vector3.forward * (rampOffsets[numArches - 1] - 5);
-        SpawnObject(rampPrefabs[numArches - 1], rampPosition);
+        //Vector3 rampPosition = segmentPosition - Vector3.forward * rampOffsets[numArches - 1];
+        ////Vector3 rampPosition = segmentPosition - Vector3.forward * (rampOffsets[numArches - 1] - 5);
+        //SpawnObject(rampPrefabs[numArches - 1], rampPosition);
  
         for (int i = 0; i < 5; i++)
         {

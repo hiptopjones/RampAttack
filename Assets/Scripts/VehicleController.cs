@@ -89,7 +89,7 @@ public class VehicleController : MonoBehaviour
         }
     }
 
-    private bool IsGrounded()
+    public bool IsGrounded()
     {
         // Determine if all four wheels are on the ground
         foreach (WheelCollider wheelCollider in wheelColliders)
@@ -109,7 +109,7 @@ public class VehicleController : MonoBehaviour
         return true;
     }
 
-    private bool IsAirborne()
+    public bool IsAirborne()
     {
         // Determine if all four wheels are off the ground
         foreach (WheelCollider wheelCollider in wheelColliders)
