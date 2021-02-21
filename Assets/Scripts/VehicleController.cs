@@ -13,6 +13,8 @@ public class VehicleController : MonoBehaviour
     [SerializeField] float targetPitchAngle = 0;
 
     [SerializeField] GameObject voxelPrefab;
+    [SerializeField] float explosionScatter = 1;
+    [SerializeField] float numExplosionVoxels = 20;
 
     Rigidbody vehicleRigidbody;
 
@@ -29,8 +31,6 @@ public class VehicleController : MonoBehaviour
         // Increase stability
         vehicleRigidbody.centerOfMass = centerOfMass;
         vehicleRigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-
-        InitializeParticles();
     }
 
     void Update()
@@ -138,33 +138,17 @@ public class VehicleController : MonoBehaviour
 
         if (other.tag == "Obstacle")
         {
-            foreach (GameObject particle in particles)
+            for (int i = 0; i < numExplosionVoxels; i++)
             {
-                particle.transform.position = transform.position;
-                particle.SetActive(true);
+                Vector3 particlePosition = transform.position + new Vector3(Random.Range(-explosionScatter, explosionScatter), Random.Range(0, explosionScatter), Random.Range(-explosionScatter, explosionScatter));
+                Vector3 eulerAngles = new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
+                GameObject particle = Instantiate(voxelPrefab, particlePosition, Quaternion.Euler(eulerAngles));
             }
 
             GameSession gameSession = FindObjectOfType<GameSession>();
             gameSession.PlayerDied();
 
             Destroy(gameObject);
-        }
-    }
-
-    private void InitializeParticles()
-    {
-        particles = new List<GameObject>();
-
-        for (int i = 0; i < 100; i++)
-        {
-            Vector3 eulerAngles = new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
-            GameObject particle = Instantiate(voxelPrefab, transform.position, Quaternion.Euler(eulerAngles));
-            Rigidbody particleRigidbody = particle.GetComponent<Rigidbody>();
-            particleRigidbody.velocity = new Vector3(Random.Range(-20, 20), Random.Range(-20, 20), Random.Range(-20, 20));
-
-            particle.SetActive(false);
-
-            particles.Add(particle);
         }
     }
 }

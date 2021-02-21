@@ -121,6 +121,75 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &54080791
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 8717073647590548724, guid: 9cfb195dcf4f87844b4dc2592c55500b,
+        type: 3}
+      propertyPath: m_Name
+      value: Road Segment
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717073647590548725, guid: 9cfb195dcf4f87844b4dc2592c55500b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717073647590548725, guid: 9cfb195dcf4f87844b4dc2592c55500b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717073647590548725, guid: 9cfb195dcf4f87844b4dc2592c55500b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717073647590548725, guid: 9cfb195dcf4f87844b4dc2592c55500b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717073647590548725, guid: 9cfb195dcf4f87844b4dc2592c55500b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717073647590548725, guid: 9cfb195dcf4f87844b4dc2592c55500b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717073647590548725, guid: 9cfb195dcf4f87844b4dc2592c55500b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717073647590548725, guid: 9cfb195dcf4f87844b4dc2592c55500b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717073647590548725, guid: 9cfb195dcf4f87844b4dc2592c55500b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717073647590548725, guid: 9cfb195dcf4f87844b4dc2592c55500b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717073647590548725, guid: 9cfb195dcf4f87844b4dc2592c55500b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9cfb195dcf4f87844b4dc2592c55500b, type: 3}
 --- !u!1 &288258979
 GameObject:
   m_ObjectHideFlags: 0
@@ -478,6 +547,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ghost Ramp
       objectReference: {fileID: 0}
+    - target: {fileID: 572212733700842581, guid: a0964caf63e288d4189e9e64f720762b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 967337756264202356, guid: a0964caf63e288d4189e9e64f720762b,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 967337756264202356, guid: a0964caf63e288d4189e9e64f720762b,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0964caf63e288d4189e9e64f720762b, type: 3}
 --- !u!1001 &626730893
@@ -487,6 +571,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4274648903771207258, guid: 26805c6c29202714cbc0f96e0b10966c,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 4274648903920639737, guid: 26805c6c29202714cbc0f96e0b10966c,
         type: 3}
       propertyPath: m_Name
@@ -546,6 +635,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4274648904246099633, guid: 26805c6c29202714cbc0f96e0b10966c,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 4274648904370638347, guid: 26805c6c29202714cbc0f96e0b10966c,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 4274648904565542070, guid: 26805c6c29202714cbc0f96e0b10966c,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 26805c6c29202714cbc0f96e0b10966c, type: 3}
@@ -805,6 +909,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2074112280336758387, guid: 1af582bc1287b4b48a1cd5efe7700f15,
+        type: 3}
+      propertyPath: gameOverDelaySeconds
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2074112280336758388, guid: 1af582bc1287b4b48a1cd5efe7700f15,
         type: 3}
@@ -1331,33 +1440,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2687207329868974795, guid: 505ff361493f6c048b387552347559e2,
         type: 3}
-      propertyPath: coinOffsets.Array.data[0]
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 2687207329868974795, guid: 505ff361493f6c048b387552347559e2,
-        type: 3}
-      propertyPath: coinOffsets.Array.data[1]
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 2687207329868974795, guid: 505ff361493f6c048b387552347559e2,
-        type: 3}
-      propertyPath: coinOffsets.Array.data[2]
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 2687207329868974795, guid: 505ff361493f6c048b387552347559e2,
-        type: 3}
-      propertyPath: rampOffsets.Array.data[0]
-      value: 22
-      objectReference: {fileID: 0}
-    - target: {fileID: 2687207329868974795, guid: 505ff361493f6c048b387552347559e2,
-        type: 3}
-      propertyPath: rampOffsets.Array.data[1]
-      value: 21
-      objectReference: {fileID: 0}
-    - target: {fileID: 2687207329868974795, guid: 505ff361493f6c048b387552347559e2,
-        type: 3}
-      propertyPath: rampOffsets.Array.data[2]
-      value: 13
+      propertyPath: segmentLength
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 505ff361493f6c048b387552347559e2, type: 3}

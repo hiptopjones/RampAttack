@@ -58,11 +58,16 @@ MonoBehaviour:
   initialSpawnCount: 2
   segmentLength: 75
   archHeight: 3
+  archSpacing: 3
+  maxArchesUp: 3
+  maxArchesDeep: 3
   rampOffsets:
-  - 5.5
-  - 7
-  - 7.5
-  coinOffsets:
-  - 24
+  - 22
   - 21
   - 13
+  coinOffsets:
+  - 7
+  - 7
+  - 7
+  numCoinsPerSegment: 5
+  coinSpacing: 4

@@ -15,8 +15,13 @@ public class SegmentSpawner : MonoBehaviour
     [SerializeField] float initialSpawnCount = 2;
     [SerializeField] float segmentLength = 75;
     [SerializeField] float archHeight = 3;
+    [SerializeField] float archSpacing = 3;
+    [SerializeField] int maxArchesUp = 3;
+    [SerializeField] int maxArchesDeep = 3;
     [SerializeField] float[] rampOffsets;
     [SerializeField] float[] coinOffsets;
+    [SerializeField] float numCoinsPerSegment = 5;
+    [SerializeField] float coinSpacing = 4;
 
     private int numSegmentsSpawned = 0;
     private bool isSpawning;
@@ -76,21 +81,25 @@ public class SegmentSpawner : MonoBehaviour
         Vector3 segmentPosition = startSpawnPosition + Vector3.forward * numSegmentsSpawned * segmentLength;
         SpawnObject(roadPrefab, segmentPosition);
 
-        int numArches = Random.Range(1, 4);
-        for (int i = 0; i < numArches; i++)
+        int numArchesUp = Random.Range(1, maxArchesUp + 1);
+        int numArchesDeep = Random.Range(1, maxArchesDeep + 1);
+        for (int z = 0; z < numArchesDeep; z++)
         {
-            Vector3 archPosition = segmentPosition + Vector3.up * i * archHeight;
-            SpawnObject(archPrefab, archPosition);
+            for (int y = 0; y < numArchesUp; y++)
+            {
+                Vector3 archPosition = segmentPosition + (Vector3.up * y * archHeight) + (Vector3.forward * z * archSpacing);
+                SpawnObject(archPrefab, archPosition);
+            }
         }
 
         //Vector3 rampPosition = segmentPosition - Vector3.forward * rampOffsets[numArches - 1];
         //SpawnObject(rampPrefabs[numArches - 1], rampPosition);
- 
-        for (int i = 0; i < 5; i++)
-        {
-            float coinOffset = coinOffsets[numArches - 1] + i * 4;
 
-            Vector3 coinPosition = segmentPosition + Vector3.forward * coinOffset + Vector3.up;
+        for (int i = 0; i < numCoinsPerSegment; i++)
+        {
+            float coinOffset = coinOffsets[numArchesUp - 1] + ((numArchesDeep - 1) * archSpacing) + (i * coinSpacing);
+
+            Vector3 coinPosition = segmentPosition + Vector3.forward * coinOffset;
             SpawnObject(coinPrefab, coinPosition);
         }
 

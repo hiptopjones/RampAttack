@@ -418,6 +418,10 @@ MonoBehaviour:
   targetPitchAngle: 0
   voxelPrefab: {fileID: 5702517189894727087, guid: f1dddbfbe38f9ad43a025109a363ab37,
     type: 3}
+  coinPrefab: {fileID: 530795374733176083, guid: 7fab4a7437a0a884a9812fcaec448bb5,
+    type: 3}
+  explosionScatter: 1
+  numExplosionVoxels: 20
 --- !u!1 &4274648904164753947
 GameObject:
   m_ObjectHideFlags: 0
