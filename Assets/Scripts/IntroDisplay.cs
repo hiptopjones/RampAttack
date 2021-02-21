@@ -14,18 +14,18 @@ public class IntroDisplay : MonoBehaviour
     TextMeshProUGUI introText;
     float textStartTime;
 
-    void Update()
-    {
-        float currentFontSize = Mathf.Lerp(startFontSize, endFontSize, Time.time - textStartTime);
-        introText.fontSize = currentFontSize;
-    }
-
-    public void StartIntro()
+    private void Start()
     {
         introText = GetComponent<TextMeshProUGUI>();
         gameSession = FindObjectOfType<GameSession>();
 
         StartCoroutine(ReadySetGo());
+    }
+
+    void Update()
+    {
+        float currentFontSize = Mathf.Lerp(startFontSize, endFontSize, Time.time - textStartTime);
+        introText.fontSize = currentFontSize;
     }
 
     private IEnumerator ReadySetGo()

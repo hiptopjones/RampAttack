@@ -21,12 +21,6 @@ public class GameSession : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        IntroDisplay introDisplay = FindObjectOfType<IntroDisplay>();
-        introDisplay.StartIntro();
-    }
-
     // TODO: Use a proper event for this
     public void IntroComplete()
     {
@@ -37,7 +31,7 @@ public class GameSession : MonoBehaviour
     public void PlayerDied()
     {
         SceneLoader sceneLoader = FindObjectOfType<SceneLoader>();
-        sceneLoader.LoadGameOverWithDelay();
+        sceneLoader.LoadGameOver();
     }
 
     public int GetTotalCoins()
