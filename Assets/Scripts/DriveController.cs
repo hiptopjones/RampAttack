@@ -10,11 +10,13 @@ public class DriveController : MonoBehaviour
 
     [SerializeField] float speed = 25;
     [SerializeField] float pitchCorrectionTime = 5;
-    [SerializeField] float targetPitchAngle = -10;
+    [SerializeField] float targetPitchAngle = 0;
 
     Rigidbody vehicleRigidbody;
 
-    float lastTimeGrounded = 0;
+    float lastSurfaceTime = 0;
+
+    bool isRunning = false;
 
     void Start()
     {
@@ -23,13 +25,15 @@ public class DriveController : MonoBehaviour
         // Increase stability
         vehicleRigidbody.centerOfMass = centerOfMass;
         vehicleRigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-
-        // Start motion
-        vehicleRigidbody.velocity = Vector3.forward * speed;
     }
 
     void Update()
     {
+        if (false == isRunning)
+        {
+            return;
+        }
+
         for (int i = 0; i < wheelColliders.Length; i++)
         {
             WheelCollider wheelCollider = wheelColliders[i];
@@ -46,9 +50,14 @@ public class DriveController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (false == isRunning)
+        {
+            return;
+        }
+
         if (IsAirborne())
         {
-            float elapsedAirTime = Time.time - lastTimeGrounded;
+            float elapsedAirTime = Time.time - lastSurfaceTime;
             float fractionOfCorrection = Mathf.Clamp(elapsedAirTime / pitchCorrectionTime, 0, 1);
 
             // Straighten out the rotation so we land properly
@@ -56,18 +65,21 @@ public class DriveController : MonoBehaviour
             float newPitchAngle = Mathf.LerpAngle(eulerAngles.x, targetPitchAngle, fractionOfCorrection);
             transform.rotation = Quaternion.Euler(newPitchAngle, 0, 0);
         }
-        else if (IsGrounded())
+        else
         {
-            lastTimeGrounded = Time.time;
+            lastSurfaceTime = Time.time;
 
-            // Maintain speed when grounded
-            vehicleRigidbody.velocity = Vector3.forward * speed;
+            if (IsGrounded())
+            {
+                // Maintain speed when grounded
+                vehicleRigidbody.velocity = Vector3.forward * speed;
 
-            // Remove any stray rotations (why isn't this fixed by rigidbody constraints?)
-            transform.rotation = Quaternion.identity;
+                // Remove any stray rotations (why isn't this fixed by rigidbody constraints?)
+                transform.rotation = Quaternion.identity;
 
-            // Remove any stray position drift (why isn't this fixed by rigidbody constraints?)
-            transform.position = new Vector3(0, transform.position.y, transform.position.z);
+                // Remove any stray position drift (why isn't this fixed by rigidbody constraints?)
+                transform.position = new Vector3(0, transform.position.y, transform.position.z);
+            }
         }
     }
 
@@ -104,5 +116,18 @@ public class DriveController : MonoBehaviour
         }
 
         return true;
+    }
+
+    public void StartDriving()
+    {
+        isRunning = true;
+
+        // Start motion
+        vehicleRigidbody.velocity = Vector3.forward * speed;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("DriveController: OnTriggerEnter: " + other.name);
     }
 }
