@@ -6,8 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class GameSession : MonoBehaviour
 {
-    int numTowers;
-    int numCoins;
+    int currentTowers;
+    int currentCoins;
+    int bestTowers;
+    int bestCoins;
 
     void Awake()
     {
@@ -21,6 +23,11 @@ public class GameSession : MonoBehaviour
         {
             DontDestroyOnLoad(gameObject);
         }
+    }
+
+    void Start()
+    {
+        Time.timeScale = 1.5f;
     }
 
     // TODO: Use a proper event for this
@@ -37,28 +44,47 @@ public class GameSession : MonoBehaviour
         sceneLoader.LoadGameWithDelay();
     }
 
-    public int GetNumCoins()
+    public int GetCurrentCoins()
     {
-        return numCoins;
+        return currentCoins;
     }
 
-    public void AddCoins(int coinsToAdd)
+    public int GetBestCoins()
     {
-        this.numCoins += coinsToAdd;
+        return bestCoins;
     }
 
-    public int GetNumTowers()
+    public void AddCoins(int numCoins)
     {
-        return numTowers;
+        currentCoins += numCoins;
+        if (currentCoins > bestCoins)
+        {
+            bestCoins = currentCoins;
+        }
+    }
+
+    public int GetCurrentTowers()
+    {
+        return currentTowers;
+    }
+
+    public int GetBestTowers()
+    {
+        return bestTowers;
     }
 
     public void SetTowers(int numTowers)
     {
-        this.numTowers = numTowers;
+        currentTowers = numTowers;
+        if (currentTowers > bestTowers)
+        {
+            bestTowers = currentTowers;
+        }
     }
 
     public void ResetGame()
     {
-        Destroy(gameObject);
+        currentTowers = 0;
+        currentCoins = 0;
     }
 }

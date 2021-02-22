@@ -5,6 +5,8 @@ using TMPro;
 
 public class TowerDisplay : MonoBehaviour
 {
+    [SerializeField] bool isBest;
+
     TextMeshProUGUI towerText;
     GameSession gameSession;
 
@@ -18,6 +20,6 @@ public class TowerDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        towerText.text = gameSession.GetNumTowers().ToString();
+        towerText.text = isBest ? gameSession.GetBestTowers().ToString() : gameSession.GetCurrentTowers().ToString();
     }
 }

@@ -31,8 +31,10 @@ public class SegmentSpawner : MonoBehaviour
     void Update()
     {
         Vector3 playerCurrentPosition = vehicleController.transform.position;
-        int numSegmentsCleared = (int)((playerCurrentPosition.z - startSpawnPosition.z) / segmentLength);
 
+        // TODO: This shouldn't be done here, but it's the most convenience place for now
+        // because it is where segment length is defined
+        int numSegmentsCleared = (int)((playerCurrentPosition.z - startSpawnPosition.z) / segmentLength);
         gameSession.SetTowers(numSegmentsCleared);
 
         if (isSpawning)
@@ -78,7 +80,7 @@ public class SegmentSpawner : MonoBehaviour
 
     void SpawnSegment(Vector3 segmentPosition)
     {
-        // Difficulty (for example)
+        // Difficulty progression (for example)
         // - level 1, towers are simple, with single depth
         // - level 2, towers are simple, with multiple depth
         // - level 3, towers can be extra tall, but must have a gap on the bottom layer
@@ -113,8 +115,16 @@ public class SegmentSpawner : MonoBehaviour
         }
         else
         {
-            towerType = (int)(Random.value * (difficultyLevel + 1));
+            int numTowerTypes = 6;
+
+            int lowerTowerType = 1;
+            int upperTowerType = Mathf.Min(difficultyLevel + 1, numTowerTypes);
+
+            // Use power of 2 to try and weight the harder towers in the higher difficulty levels
+            towerType = (int)Mathf.Sqrt(Random.Range(lowerTowerType, Mathf.Pow(upperTowerType, 2)));
         }
+
+        Debug.Log("Difficulty: " + difficultyLevel + " Tower: " + towerType);
 
         if (towerType < 3)
         {
@@ -151,7 +161,15 @@ public class SegmentSpawner : MonoBehaviour
             // Must jump over them
 
             int numArchesUp = Random.Range(1, 4);
-            int numArchesDeep = Random.Range(1, 5);
+
+            // Maybe impossible to make this jump otherwise
+            int maxArchesDeep = 4;
+            if (numArchesUp == 3)
+            {
+                maxArchesDeep = 3;
+            }
+
+            int numArchesDeep = Random.Range(1, maxArchesDeep + 1);
 
             for (int z = 0; z < numArchesDeep; z++)
             {
@@ -186,7 +204,7 @@ public class SegmentSpawner : MonoBehaviour
                 arch.transform.position = segmentPosition + (Vector3.up * y * archHeight);
             }
         }
-        else if (towerType == 5)
+        else if (towerType >= 5)
         {
             // Possibly taller towers, with gap on layers above the ground
             // Must fly through these
@@ -194,7 +212,7 @@ public class SegmentSpawner : MonoBehaviour
             bool isArch1Open = false;
             bool hasOpening = false;
 
-            int numArchesUp = Random.Range(3, 6);
+            int numArchesUp = Random.Range(2, 6);
 
             for (int y = 0; y < numArchesUp; y++)
             {
@@ -217,7 +235,7 @@ public class SegmentSpawner : MonoBehaviour
                         int numArchesRemaining = numArchesUp - y;
 
                         // Ensure the tower has an opening
-                        bool openArch1 = (numArchesRemaining > 2 && Random.value > 0.5f) || false == hasOpening;
+                        bool openArch1 = (numArchesRemaining > 2 && Random.value > 0.5f) || (false == hasOpening && numArchesUp > 3);
                         if (openArch1)
                         {
                             arch = resourceManager.GetOrCreateArch1();
@@ -238,8 +256,8 @@ public class SegmentSpawner : MonoBehaviour
 
     void SpawnCoins(Vector3 segmentPosition)
     {
-        float firstCoinZ = segmentPosition.z + segmentLength / 3;
-        float lastCoinZ = segmentPosition.z + segmentLength * 2 / 3;
+        float firstCoinZ = segmentPosition.z + segmentLength / 4;
+        float lastCoinZ = segmentPosition.z + segmentLength * 3 / 4;
 
         for (float z = firstCoinZ; z <= lastCoinZ; z += coinSpacing)
         {
@@ -274,9 +292,13 @@ public class SegmentSpawner : MonoBehaviour
         {
             return 5;
         }
-        else
+        else if (numSegmentsSpawned < 20)
         {
             return 6;
+        }
+        else
+        {
+            return 7;
         }
     }
 }
