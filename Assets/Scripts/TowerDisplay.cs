@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class CoinDisplay : MonoBehaviour
+public class TowerDisplay : MonoBehaviour
 {
-    TextMeshProUGUI coinText;
+    TextMeshProUGUI towerText;
     GameSession gameSession;
 
     // Start is called before the first frame update
     void Start()
     {
-        coinText = GetComponent<TextMeshProUGUI>();
+        towerText = GetComponent<TextMeshProUGUI>();
         gameSession = FindObjectOfType<GameSession>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        coinText.text = gameSession.GetNumCoins().ToString();
+        towerText.text = gameSession.GetNumTowers().ToString();
     }
 }

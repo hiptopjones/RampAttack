@@ -6,9 +6,9 @@ public class GhostRamp : MonoBehaviour
 {
     [SerializeField] float ghostOffset;
 
+    private ResourceManager resourceManager;
     private MeshRenderer meshRenderer;
     private VehicleController vehicleController;
-    private ResourceManager resourceManager;
 
     private bool isRampPlaced = false;
 
@@ -23,6 +23,15 @@ public class GhostRamp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Ensure the ghost always shows in the right place
+        transform.position = vehicleController.transform.position + Vector3.forward * ghostOffset;
+
+        // Prevent any ramps before the player starts moving
+        if (false == vehicleController.IsRunning())
+        {
+            return;
+        }
+
         if (isRampPlaced)
         {
             if (vehicleController.IsAirborne())
@@ -56,7 +65,6 @@ public class GhostRamp : MonoBehaviour
                 }
                 else
                 {
-                    transform.position = vehicleController.transform.position + Vector3.forward * ghostOffset;
                     meshRenderer.enabled = true;
                 }
             }

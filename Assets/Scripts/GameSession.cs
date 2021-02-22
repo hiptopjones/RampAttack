@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class GameSession : MonoBehaviour
 {
-    int totalCoins;
+    int numTowers;
+    int numCoins;
 
     void Awake()
     {
@@ -33,17 +34,27 @@ public class GameSession : MonoBehaviour
     public void PlayerDied()
     {
         SceneLoader sceneLoader = FindObjectOfType<SceneLoader>();
-        sceneLoader.LoadGameOver();
+        sceneLoader.LoadGameWithDelay();
     }
 
-    public int GetTotalCoins()
+    public int GetNumCoins()
     {
-        return totalCoins;
+        return numCoins;
     }
 
-    public void AddCoins(int numCoins)
+    public void AddCoins(int coinsToAdd)
     {
-        totalCoins += numCoins;
+        this.numCoins += coinsToAdd;
+    }
+
+    public int GetNumTowers()
+    {
+        return numTowers;
+    }
+
+    public void SetTowers(int numTowers)
+    {
+        this.numTowers = numTowers;
     }
 
     public void ResetGame()

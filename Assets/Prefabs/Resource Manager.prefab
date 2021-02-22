@@ -47,7 +47,11 @@ MonoBehaviour:
   reclaimDistance: 80
   roadPrefab: {fileID: 8717073647590548724, guid: 9cfb195dcf4f87844b4dc2592c55500b,
     type: 3}
-  archPrefab: {fileID: 8789988168751324776, guid: 9e64b89036f79334285eacf27439332c,
+  arch1Prefab: {fileID: 230945325354732871, guid: 7310e83ffbc19a742b7dc5918f9b26c6,
+    type: 3}
+  arch2Prefab: {fileID: 1600665381590983771, guid: d3e3f54a62617414183c8bf89a1b036f,
+    type: 3}
+  arch3Prefab: {fileID: 8789988168751324776, guid: 9e64b89036f79334285eacf27439332c,
     type: 3}
   coinPrefab: {fileID: 530795374733176083, guid: 7fab4a7437a0a884a9812fcaec448bb5,
     type: 3}

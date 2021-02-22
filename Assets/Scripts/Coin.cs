@@ -5,8 +5,6 @@ using UnityEngine;
 public class Coin : MonoBehaviour
 {
     [SerializeField] float rotationSpeed = 1f;
-    [SerializeField] GameObject explosionPrefab;
-    [SerializeField] float explosionTimeToLive = 2;
 
     ResourceManager resourceManager;
 

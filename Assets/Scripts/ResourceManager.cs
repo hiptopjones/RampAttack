@@ -7,7 +7,9 @@ using UnityEngine;
 public enum ObjectType
 {
     Road,
-    Arch,
+    Arch1,
+    Arch2,
+    Arch3,
     Coin,
     CoinEffect,
     SmallRamp,
@@ -21,7 +23,9 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] float reclaimDistance = 80;
 
     [SerializeField] GameObject roadPrefab;
-    [SerializeField] GameObject archPrefab;
+    [SerializeField] GameObject arch1Prefab;
+    [SerializeField] GameObject arch2Prefab;
+    [SerializeField] GameObject arch3Prefab;
     [SerializeField] GameObject coinPrefab;
     [SerializeField] GameObject coinEffectPrefab;
     [SerializeField] GameObject smallRampPrefab;
@@ -40,7 +44,9 @@ public class ResourceManager : MonoBehaviour
         vehicleController = FindObjectOfType<VehicleController>();
 
         activeObjects[ObjectType.Road] = new HashSet<GameObject>();
-        activeObjects[ObjectType.Arch] = new HashSet<GameObject>();
+        activeObjects[ObjectType.Arch1] = new HashSet<GameObject>();
+        activeObjects[ObjectType.Arch2] = new HashSet<GameObject>();
+        activeObjects[ObjectType.Arch3] = new HashSet<GameObject>();
         activeObjects[ObjectType.Coin] = new HashSet<GameObject>();
         activeObjects[ObjectType.CoinEffect] = new HashSet<GameObject>();
         activeObjects[ObjectType.SmallRamp] = new HashSet<GameObject>();
@@ -48,7 +54,9 @@ public class ResourceManager : MonoBehaviour
         activeObjects[ObjectType.LargeRamp] = new HashSet<GameObject>();
 
         freeObjects[ObjectType.Road] = new Stack<GameObject>();
-        freeObjects[ObjectType.Arch] = new Stack<GameObject>();
+        freeObjects[ObjectType.Arch1] = new Stack<GameObject>();
+        freeObjects[ObjectType.Arch2] = new Stack<GameObject>();
+        freeObjects[ObjectType.Arch3] = new Stack<GameObject>();
         freeObjects[ObjectType.Coin] = new Stack<GameObject>();
         freeObjects[ObjectType.CoinEffect] = new Stack<GameObject>();
         freeObjects[ObjectType.SmallRamp] = new Stack<GameObject>();
@@ -103,9 +111,19 @@ public class ResourceManager : MonoBehaviour
         DestroyObject(ObjectType.Road, road);
     }
 
-    public void DestroyArch(GameObject arch)
+    public void DestroyArch1(GameObject arch)
     {
-        DestroyObject(ObjectType.Arch, arch);
+        DestroyObject(ObjectType.Arch1, arch);
+    }
+
+    public void DestroyArch2(GameObject arch)
+    {
+        DestroyObject(ObjectType.Arch2, arch);
+    }
+
+    public void DestroyArch3(GameObject arch)
+    {
+        DestroyObject(ObjectType.Arch3, arch);
     }
 
     public void DestroyCoin(GameObject coin)
@@ -145,9 +163,19 @@ public class ResourceManager : MonoBehaviour
         return GetOrCreateObject(ObjectType.Road);
     }
 
-    public GameObject GetOrCreateArch()
+    public GameObject GetOrCreateArch1()
     {
-        return GetOrCreateObject(ObjectType.Arch);
+        return GetOrCreateObject(ObjectType.Arch1);
+    }
+
+    public GameObject GetOrCreateArch2()
+    {
+        return GetOrCreateObject(ObjectType.Arch2);
+    }
+
+    public GameObject GetOrCreateArch3()
+    {
+        return GetOrCreateObject(ObjectType.Arch3);
     }
 
     public GameObject GetOrCreateCoin()
@@ -201,8 +229,14 @@ public class ResourceManager : MonoBehaviour
             case ObjectType.Road:
                 return roadPrefab;
 
-            case ObjectType.Arch:
-                return archPrefab;
+            case ObjectType.Arch1:
+                return arch1Prefab;
+
+            case ObjectType.Arch2:
+                return arch2Prefab;
+
+            case ObjectType.Arch3:
+                return arch3Prefab;
 
             case ObjectType.Coin:
                 return coinPrefab;

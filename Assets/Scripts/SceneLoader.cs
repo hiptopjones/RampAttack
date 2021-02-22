@@ -5,22 +5,27 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
-    [SerializeField] float gameOverDelaySeconds = 2;
+    [SerializeField] float gameDelaySeconds = 2;
 
     public void LoadGameOver()
     {
-        StartCoroutine(LoadGameOverWithDelay());
-    }
-
-    public IEnumerator LoadGameOverWithDelay()
-    {
-        yield return new WaitForSeconds(gameOverDelaySeconds);
         SceneManager.LoadScene("Game Over");
     }
 
     public void LoadStartMenu()
     {
         SceneManager.LoadScene("Start Menu");
+    }
+
+    public void LoadGameWithDelay()
+    {
+        StartCoroutine(LoadGameWithDelayCoroutine());
+    }
+
+    public IEnumerator LoadGameWithDelayCoroutine()
+    {
+        yield return new WaitForSeconds(gameDelaySeconds);
+        LoadGame();
     }
 
     public void LoadGame()

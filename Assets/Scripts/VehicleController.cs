@@ -124,6 +124,11 @@ public class VehicleController : MonoBehaviour
         return true;
     }
 
+    public bool IsRunning()
+    {
+        return isRunning;
+    }
+
     public void StartDriving()
     {
         isRunning = true;
@@ -142,7 +147,7 @@ public class VehicleController : MonoBehaviour
             {
                 Vector3 particlePosition = transform.position + new Vector3(Random.Range(-explosionScatter, explosionScatter), Random.Range(0, explosionScatter), Random.Range(-explosionScatter, explosionScatter));
                 Vector3 eulerAngles = new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
-                GameObject particle = Instantiate(voxelPrefab, particlePosition, Quaternion.Euler(eulerAngles));
+                Instantiate(voxelPrefab, particlePosition, Quaternion.Euler(eulerAngles));
             }
 
             GameSession gameSession = FindObjectOfType<GameSession>();
