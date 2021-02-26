@@ -413,12 +413,9 @@ MonoBehaviour:
   - {fileID: 4274648903701286196}
   - {fileID: 4274648903307406937}
   - {fileID: 4274648904623829111}
-  speed: 20
+  speed: 0
   pitchCorrectionTime: 5
-  targetPitchAngle: 0
   voxelPrefab: {fileID: 5702517189894727087, guid: f1dddbfbe38f9ad43a025109a363ab37,
-    type: 3}
-  coinPrefab: {fileID: 530795374733176083, guid: 7fab4a7437a0a884a9812fcaec448bb5,
     type: 3}
   explosionScatter: 1
   numExplosionVoxels: 20

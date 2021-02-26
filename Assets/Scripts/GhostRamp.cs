@@ -8,7 +8,7 @@ public class GhostRamp : MonoBehaviour
 
     private ResourceManager resourceManager;
     private MeshRenderer meshRenderer;
-    private VehicleController vehicleController;
+    private VehiclePhysicsController vehiclePhysicsController;
 
     private bool isRampPlaced = false;
 
@@ -17,31 +17,36 @@ public class GhostRamp : MonoBehaviour
     {
         resourceManager = FindObjectOfType<ResourceManager>();
         meshRenderer = GetComponentInChildren<MeshRenderer>();
-        vehicleController = FindObjectOfType<VehicleController>();
+        vehiclePhysicsController = FindObjectOfType<VehiclePhysicsController>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (vehiclePhysicsController == null)
+        {
+            return;
+        }
+
         // Ensure the ghost always shows in the right place
-        transform.position = vehicleController.transform.position + Vector3.forward * ghostOffset;
+        transform.position = vehiclePhysicsController.transform.position + Vector3.forward * ghostOffset;
 
         // Prevent any ramps before the player starts moving
-        if (false == vehicleController.IsRunning())
+        if (false == vehiclePhysicsController.IsRunning())
         {
             return;
         }
 
         if (isRampPlaced)
         {
-            if (vehicleController.IsAirborne())
+            if (vehiclePhysicsController.IsAirborne())
             {
                 isRampPlaced = false;
             }
         }
         else
         {
-            if (vehicleController.IsGrounded())
+            if (vehiclePhysicsController.IsGrounded())
             {
                 GameObject ramp = null;
 
@@ -62,6 +67,9 @@ public class GhostRamp : MonoBehaviour
                 {
                     ramp.transform.position = transform.position;
                     isRampPlaced = true;
+
+                    // Disable right away to see if this prevents looking like the marker continues up the ramp
+                    meshRenderer.enabled = false;
                 }
                 else
                 {

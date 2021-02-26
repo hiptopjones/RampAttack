@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VehicleController : MonoBehaviour
+public class VehiclePhysicsController : MonoBehaviour
 {
     [SerializeField] Vector3 centerOfMass;
     [SerializeField] WheelCollider[] wheelColliders;
@@ -10,22 +10,19 @@ public class VehicleController : MonoBehaviour
 
     [SerializeField] float speed = 25;
     [SerializeField] float pitchCorrectionTime = 5;
-    [SerializeField] float targetPitchAngle = 0;
 
-    [SerializeField] GameObject voxelPrefab;
-    [SerializeField] float explosionScatter = 1;
-    [SerializeField] float numExplosionVoxels = 20;
-
+    VehicleRenderController vehicleRenderController;
     Rigidbody vehicleRigidbody;
 
-    float lastSurfaceTime = 0;
+    float lastGroundedTime = 0;
 
     bool isRunning = false;
 
-    List<GameObject> particles;
+    float correctedPitchAngle = 0;
 
     void Start()
     {
+        vehicleRenderController = FindObjectOfType<VehicleRenderController>();
         vehicleRigidbody = GetComponentInParent<Rigidbody>();
 
         // Increase stability
@@ -40,18 +37,19 @@ public class VehicleController : MonoBehaviour
             return;
         }
 
-        for (int i = 0; i < wheelColliders.Length; i++)
-        {
-            WheelCollider wheelCollider = wheelColliders[i];
-            GameObject wheelMesh = wheelMeshes[i];
+        // TODO: Move this to the render twin
+        //for (int i = 0; i < wheelColliders.Length; i++)
+        //{
+        //    WheelCollider wheelCollider = wheelColliders[i];
+        //    GameObject wheelMesh = wheelMeshes[i];
 
-            // Make the mesh track the colliders
-            Quaternion rotation;
-            Vector3 position;
-            wheelCollider.GetWorldPose(out position, out rotation);
-            wheelMesh.transform.position = position;
-            wheelMesh.transform.rotation = rotation;
-        }
+        //    // Make the mesh track the colliders
+        //    Quaternion rotation;
+        //    Vector3 position;
+        //    wheelCollider.GetWorldPose(out position, out rotation);
+        //    wheelMesh.transform.position = position;
+        //    wheelMesh.transform.rotation = rotation;
+        //}
     }
 
     void FixedUpdate()
@@ -63,17 +61,33 @@ public class VehicleController : MonoBehaviour
 
         if (IsAirborne())
         {
-            float elapsedAirTime = Time.time - lastSurfaceTime;
-            float fractionOfCorrection = Mathf.Clamp(elapsedAirTime / pitchCorrectionTime, 0, 1);
+            Vector3 eulerAngles = vehicleRigidbody.rotation.eulerAngles;
 
-            // Straighten out the rotation so we land properly
-            Vector3 eulerAngles = transform.eulerAngles;
-            float newPitchAngle = Mathf.LerpAngle(eulerAngles.x, targetPitchAngle, fractionOfCorrection);
-            transform.rotation = Quaternion.Euler(newPitchAngle, 0, 0);
+            float newPitchAngle = eulerAngles.x;
+            float newYawAngle = 0;
+            float newRollAngle = 0;
+
+            if (Mathf.Abs(eulerAngles.x % 360) < 1)
+            {
+                newPitchAngle = 0;
+            }
+            else
+            {
+                // Straighten out any rotation so we land properly
+                //  - Should do this on all axes to be safe?
+                //  - Force the end of the trick if too close to the ground
+                float elapsedAirTime = Time.time - lastGroundedTime;
+                float correctedPitchAngleFraction = Mathf.Clamp(elapsedAirTime / pitchCorrectionTime, 0, 1);
+
+                newPitchAngle = Mathf.LerpAngle(eulerAngles.x, correctedPitchAngle, correctedPitchAngleFraction);
+            }
+
+            Vector3 newEulerAngles = new Vector3(newPitchAngle, newYawAngle, newRollAngle);
+            vehicleRigidbody.rotation = Quaternion.Euler(newEulerAngles);
         }
         else
         {
-            lastSurfaceTime = Time.time;
+            lastGroundedTime = Time.time;
 
             if (IsGrounded())
             {
@@ -81,10 +95,10 @@ public class VehicleController : MonoBehaviour
                 vehicleRigidbody.velocity = Vector3.forward * speed;
 
                 // Remove any stray rotations (why isn't this fixed by rigidbody constraints?)
-                transform.rotation = Quaternion.identity;
+                vehicleRigidbody.rotation = Quaternion.identity;
 
                 // Remove any stray position drift (why isn't this fixed by rigidbody constraints?)
-                transform.position = new Vector3(0, transform.position.y, transform.position.z);
+                vehicleRigidbody.position = new Vector3(0, transform.position.y, transform.position.z);
             }
         }
     }
@@ -129,7 +143,7 @@ public class VehicleController : MonoBehaviour
         return isRunning;
     }
 
-    public void StartDriving()
+    public void OnGameStarted()
     {
         isRunning = true;
 
@@ -139,20 +153,11 @@ public class VehicleController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("VehicleController: OnTriggerEnter: " + other.name);
+        //Debug.Log("VehiclePhysicsController: OnTriggerEnter: " + other.name);
 
         if (other.tag == "Obstacle")
         {
-            for (int i = 0; i < numExplosionVoxels; i++)
-            {
-                Vector3 particlePosition = transform.position + new Vector3(Random.Range(-explosionScatter, explosionScatter), Random.Range(0, explosionScatter), Random.Range(-explosionScatter, explosionScatter));
-                Vector3 eulerAngles = new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
-                Instantiate(voxelPrefab, particlePosition, Quaternion.Euler(eulerAngles));
-            }
-
-            GameSession gameSession = FindObjectOfType<GameSession>();
-            gameSession.PlayerDied();
-
+            vehicleRenderController.OnPlayerDeath();
             Destroy(gameObject);
         }
     }

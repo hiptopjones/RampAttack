@@ -33,8 +33,8 @@ public class GameSession : MonoBehaviour
     // TODO: Use a proper event for this
     public void IntroComplete()
     {
-        VehicleController vehicleController = FindObjectOfType<VehicleController>();
-        vehicleController.StartDriving();
+        VehiclePhysicsController vehiclePhysicsController = FindObjectOfType<VehiclePhysicsController>();
+        vehiclePhysicsController.OnGameStarted();
     }
 
     // TODO: Use a proper event for this

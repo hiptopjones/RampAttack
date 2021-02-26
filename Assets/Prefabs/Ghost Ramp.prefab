@@ -45,10 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ghostOffset: 5
-  rampPrefabs:
-  - {fileID: 8348745494492852272, guid: 605e641be68f21c43b478bdb1da4c96e, type: 3}
-  - {fileID: 441841162673188571, guid: a3b97c26041a95448972dacd7a220360, type: 3}
-  - {fileID: 4645716616724954210, guid: 6a9d570fb2b2c0c478166fdad9f810aa, type: 3}
 --- !u!1 &2028827493771679435
 GameObject:
   m_ObjectHideFlags: 0
@@ -77,7 +73,7 @@ Transform:
   m_GameObject: {fileID: 2028827493771679435}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4, y: 0.2, z: 1}
+  m_LocalScale: {x: 4, y: 0.4, z: 0.5}
   m_Children: []
   m_Father: {fileID: 572212733700842580}
   m_RootOrder: 0

@@ -17,22 +17,29 @@ public class SegmentSpawner : MonoBehaviour
 
     GameSession gameSession;
     ResourceManager resourceManager;
-    VehicleController vehicleController;
+    VehiclePhysicsController vehiclePhysicsController;
 
     void Start()
     {
         gameSession = FindObjectOfType<GameSession>();
         resourceManager = FindObjectOfType<ResourceManager>();
-        vehicleController = FindObjectOfType<VehicleController>();
+        vehiclePhysicsController = FindObjectOfType<VehiclePhysicsController>();
 
         StartSpawning();
     }
 
     void Update()
     {
-        Vector3 playerCurrentPosition = vehicleController.transform.position;
+        if (vehiclePhysicsController == null)
+        {
+            return;
+        }
 
-        // TODO: This shouldn't be done here, but it's the most convenience place for now
+        // TODO: This shouldn't be here
+        // The spawner should be notified when and what and where to spawn by the game session, maybe?
+        Vector3 playerCurrentPosition = vehiclePhysicsController.transform.position;
+
+        // TODO: This shouldn't be done here, but it's the most convenient place for now
         // because it is where segment length is defined
         int numSegmentsCleared = (int)((playerCurrentPosition.z - startSpawnPosition.z) / segmentLength);
         gameSession.SetTowers(numSegmentsCleared);
@@ -124,7 +131,7 @@ public class SegmentSpawner : MonoBehaviour
             towerType = (int)Mathf.Sqrt(Random.Range(lowerTowerType, Mathf.Pow(upperTowerType, 2)));
         }
 
-        Debug.Log("Difficulty: " + difficultyLevel + " Tower: " + towerType);
+        //Debug.Log("Difficulty: " + difficultyLevel + " Tower: " + towerType);
 
         if (towerType < 3)
         {

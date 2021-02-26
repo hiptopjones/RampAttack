@@ -35,13 +35,13 @@ public class ResourceManager : MonoBehaviour
     Dictionary<ObjectType, HashSet<GameObject>> activeObjects = new Dictionary<ObjectType, HashSet<GameObject>>();
     Dictionary<ObjectType, Stack<GameObject>> freeObjects = new Dictionary<ObjectType, Stack<GameObject>>();
 
-    VehicleController vehicleController;
+    VehiclePhysicsController vehiclePhysicsController;
 
     float startTime;
 
     void Start()
     {
-        vehicleController = FindObjectOfType<VehicleController>();
+        vehiclePhysicsController = FindObjectOfType<VehiclePhysicsController>();
 
         activeObjects[ObjectType.Road] = new HashSet<GameObject>();
         activeObjects[ObjectType.Arch1] = new HashSet<GameObject>();
@@ -77,7 +77,9 @@ public class ResourceManager : MonoBehaviour
 
     private void ReclaimObjects()
     {
-        float currentVehicleZ = vehicleController.transform.position.z;
+        // TODO: This should not be here.
+        // The resource manager should be notified that it can reclaim objects meeting some condition
+        float currentVehicleZ = vehiclePhysicsController.transform.position.z;
         float candidateObjectZ = currentVehicleZ - reclaimDistance;
 
         foreach (ObjectType objectType in Enum.GetValues(typeof(ObjectType)))

@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class VehicleFollow : MonoBehaviour
 {
-    [SerializeField] GameObject target;
-
     [SerializeField] float followDistance = 8f;
 
     [SerializeField] bool enableFollowHeight = false;
@@ -19,17 +17,24 @@ public class VehicleFollow : MonoBehaviour
     float heightOffset = 0;
     float distanceOffset = 0;
 
+    VehiclePhysicsController vehiclePhysicsController;
+
+    void Start()
+    {
+        vehiclePhysicsController = FindObjectOfType<VehiclePhysicsController>();
+    }
+
     void LateUpdate()
     {
-        if (target == null)
+        if (vehiclePhysicsController == null)
         {
             return;
         }
 
-        Quaternion currentRotation = Quaternion.identity;
+        Quaternion currentRotation = transform.rotation;
         if (enableFollowRotation)
         {
-            float wantedRotationAngle = target.transform.eulerAngles.y;
+            float wantedRotationAngle = vehiclePhysicsController.transform.eulerAngles.y;
             float currentRotationAngle = transform.eulerAngles.y;
             currentRotationAngle = Mathf.LerpAngle(currentRotationAngle, wantedRotationAngle + followRotationAngle + rotationOffset, rotationDamping * Time.deltaTime);
             currentRotation = Quaternion.Euler(0, currentRotationAngle, 0);
@@ -38,14 +43,14 @@ public class VehicleFollow : MonoBehaviour
         float currentHeight = followHeight;
         if (enableFollowHeight)
         {
-            float wantedHeight = target.transform.position.y;
+            float wantedHeight = vehiclePhysicsController.transform.position.y;
             currentHeight = wantedHeight + followHeight + heightOffset;
         }
 
-        transform.position = target.transform.position;
+        transform.position = vehiclePhysicsController.transform.position;
         transform.position -= currentRotation * (Vector3.forward * (followDistance + distanceOffset));
         transform.position = new Vector3(transform.position.x, currentHeight, transform.position.z);
 
-        transform.LookAt(target.transform);
+        transform.LookAt(vehiclePhysicsController.transform);
     }
 }
