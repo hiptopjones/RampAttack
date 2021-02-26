@@ -32,16 +32,20 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] GameObject mediumRampPrefab;
     [SerializeField] GameObject largeRampPrefab;
 
-    Dictionary<ObjectType, HashSet<GameObject>> activeObjects = new Dictionary<ObjectType, HashSet<GameObject>>();
-    Dictionary<ObjectType, Stack<GameObject>> freeObjects = new Dictionary<ObjectType, Stack<GameObject>>();
+    private Dictionary<ObjectType, HashSet<GameObject>> activeObjects = new Dictionary<ObjectType, HashSet<GameObject>>();
+    private Dictionary<ObjectType, Stack<GameObject>> freeObjects = new Dictionary<ObjectType, Stack<GameObject>>();
 
-    VehiclePhysicsController vehiclePhysicsController;
+    private VehiclePhysicsController vehiclePhysicsController;
 
-    float startTime;
+    private float startTime;
 
     void Start()
     {
         vehiclePhysicsController = FindObjectOfType<VehiclePhysicsController>();
+        if (vehiclePhysicsController == null)
+        {
+            throw new System.Exception($"Unable to find object of type {nameof(VehiclePhysicsController)}");
+        }
 
         activeObjects[ObjectType.Road] = new HashSet<GameObject>();
         activeObjects[ObjectType.Arch1] = new HashSet<GameObject>();
@@ -77,6 +81,11 @@ public class ResourceManager : MonoBehaviour
 
     private void ReclaimObjects()
     {
+        if (vehiclePhysicsController == null)
+        {
+            return;
+        }
+
         // TODO: This should not be here.
         // The resource manager should be notified that it can reclaim objects meeting some condition
         float currentVehicleZ = vehiclePhysicsController.transform.position.z;

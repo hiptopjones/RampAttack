@@ -13,15 +13,19 @@ public class VehicleFollow : MonoBehaviour
     [SerializeField] float followRotationAngle = 0f;
     [SerializeField] float rotationDamping = 2.0f;
 
-    float rotationOffset = 0;
-    float heightOffset = 0;
-    float distanceOffset = 0;
+    private float rotationOffset = 0;
+    private float heightOffset = 0;
+    private float distanceOffset = 0;
 
-    VehiclePhysicsController vehiclePhysicsController;
+    private VehiclePhysicsController vehiclePhysicsController;
 
     void Start()
     {
         vehiclePhysicsController = FindObjectOfType<VehiclePhysicsController>();
+        if (vehiclePhysicsController == null)
+        {
+            throw new System.Exception($"Unable to find object of type {nameof(VehiclePhysicsController)}");
+        }
     }
 
     void LateUpdate()

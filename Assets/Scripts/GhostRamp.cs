@@ -16,8 +16,22 @@ public class GhostRamp : MonoBehaviour
     void Start()
     {
         resourceManager = FindObjectOfType<ResourceManager>();
+        if (resourceManager == null)
+        {
+            throw new System.Exception($"Unable to find object of type {nameof(ResourceManager)}");
+        }
+
         meshRenderer = GetComponentInChildren<MeshRenderer>();
+        if (meshRenderer == null)
+        {
+            throw new System.Exception($"Unable to get component in children of type {nameof(MeshRenderer)}");
+        }
+
         vehiclePhysicsController = FindObjectOfType<VehiclePhysicsController>();
+        if (vehiclePhysicsController == null)
+        {
+            throw new System.Exception($"Unable to find object of type {nameof(VehiclePhysicsController)}");
+        }
     }
 
     // Update is called once per frame

@@ -11,19 +11,28 @@ public class VehiclePhysicsController : MonoBehaviour
     [SerializeField] float speed = 25;
     [SerializeField] float pitchCorrectionTime = 5;
 
-    VehicleRenderController vehicleRenderController;
-    Rigidbody vehicleRigidbody;
+    private VehicleRenderController vehicleRenderController;
+    private Rigidbody vehicleRigidbody;
 
-    float lastGroundedTime = 0;
+    private float lastGroundedTime = 0;
 
-    bool isRunning = false;
+    private bool isRunning = false;
 
-    float correctedPitchAngle = 0;
+    private float correctedPitchAngle = 0;
 
     void Start()
     {
         vehicleRenderController = FindObjectOfType<VehicleRenderController>();
+        if (vehicleRenderController == null)
+        {
+            throw new System.Exception($"Unable to find object of type {nameof(VehicleRenderController)}");
+        }
+
         vehicleRigidbody = GetComponentInParent<Rigidbody>();
+        if (vehicleRigidbody == null)
+        {
+            throw new System.Exception($"Unable to get component in parent of type {nameof(Rigidbody)}");
+        }
 
         // Increase stability
         vehicleRigidbody.centerOfMass = centerOfMass;

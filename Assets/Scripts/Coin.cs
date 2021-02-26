@@ -6,11 +6,22 @@ public class Coin : MonoBehaviour
 {
     [SerializeField] float rotationSpeed = 1f;
 
-    ResourceManager resourceManager;
+    private ResourceManager resourceManager;
+    private GameSession gameSession;
 
-    private void Start()
+    void Start()
     {
+        gameSession = FindObjectOfType<GameSession>();
+        if (gameSession == null)
+        {
+            throw new System.Exception($"Unable to find object of type {nameof(GameSession)}");
+        }
+
         resourceManager = FindObjectOfType<ResourceManager>();
+        if (resourceManager == null)
+        {
+            throw new System.Exception($"Unable to find object of type {nameof(ResourceManager)}");
+        }
     }
 
     void Update()
@@ -22,7 +33,6 @@ public class Coin : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            GameSession gameSession = FindObjectOfType<GameSession>();
             gameSession.AddCoins(1);
 
             GameObject coinEffect = resourceManager.GetOrCreateCoinEffect();

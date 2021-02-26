@@ -10,14 +10,23 @@ public class IntroDisplay : MonoBehaviour
     [SerializeField] int startFontSize;
     [SerializeField] int endFontSize;
 
-    GameSession gameSession;
-    TextMeshProUGUI introText;
-    float textStartTime;
+    private GameSession gameSession;
+    private TextMeshProUGUI introText;
+    private float textStartTime;
 
-    private void Start()
+    void Start()
     {
         introText = GetComponent<TextMeshProUGUI>();
+        if (introText == null)
+        {
+            throw new System.Exception($"Unable to get component of type {nameof(TextMeshProUGUI)}");
+        }
+
         gameSession = FindObjectOfType<GameSession>();
+        if (gameSession == null)
+        {
+            throw new System.Exception($"Unable to find object of type {nameof(GameSession)}");
+        }
 
         StartCoroutine(ReadySetGo());
     }

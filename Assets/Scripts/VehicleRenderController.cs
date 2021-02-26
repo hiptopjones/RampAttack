@@ -9,15 +9,40 @@ public class VehicleRenderController : MonoBehaviour
     [SerializeField] float explosionScatter = 1;
     [SerializeField] float numExplosionVoxels = 20;
 
-    private VehiclePhysicsController vehiclePhysicsController;
+    // Tricks
+    [SerializeField] AnimationCurve rollCurve = AnimationCurve.Linear(0, 0, 1, 1);
+    [SerializeField] AnimationCurve yawCurve = AnimationCurve.Linear(0, 0, 1, 1);
+    [SerializeField] GameObject rollPivot;
+    [SerializeField] GameObject yawPivot;
 
+    private bool isRollActive;
+    private float startRollTime;
+    private float startRollAngle = 0;
+    private float endRollAngle = 360;
+    private float fullRollTime = 1;
+
+    private bool isYawActive;
+    private float startYawTime;
+    private float startYawAngle = 0;
+    private float endYawAngle = 360;
+    private float fullYawTime = 1;
+
+    private GameSession gameSession;
+    private VehiclePhysicsController vehiclePhysicsController;
+    
     // Start is called before the first frame update
     void Start()
     {
+        gameSession = FindObjectOfType<GameSession>();
+        if (gameSession == null)
+        {
+            throw new System.Exception($"Unable to find object of type {nameof(GameSession)}");
+        }
+
         vehiclePhysicsController = FindObjectOfType<VehiclePhysicsController>();
         if (vehiclePhysicsController == null)
         {
-            throw new System.Exception($"Unable to find {nameof(VehiclePhysicsController)}");
+            throw new System.Exception($"Unable to find object of type {nameof(VehiclePhysicsController)}");
         }
     }
 
@@ -31,6 +56,94 @@ public class VehicleRenderController : MonoBehaviour
 
         transform.position = vehiclePhysicsController.transform.position;
         transform.rotation = vehiclePhysicsController.transform.rotation;
+
+        if (vehiclePhysicsController.IsAirborne())
+        {
+            if (Input.GetKey(KeyCode.Space))
+            {
+                StartRoll();
+            }
+            
+            if (Input.GetKey(KeyCode.LeftAlt))
+            {
+                StartYaw();
+            }
+        }
+
+        if (isYawActive && false == Input.GetKey(KeyCode.LeftAlt))
+        {
+            EndYaw();
+        }
+
+        if (isRollActive)
+        {
+            float newRollAngle = Mathf.Lerp(startRollAngle, endRollAngle, rollCurve.Evaluate((Time.time - startRollTime) / fullRollTime));
+            if (newRollAngle >= endRollAngle)
+            {
+                EndRoll();
+            }
+            else
+            {
+                Vector3 eulerAngles = transform.eulerAngles;
+                float deltaAngle = newRollAngle - eulerAngles.z;
+                transform.RotateAround(rollPivot.transform.position, Vector3.forward, deltaAngle);
+            }
+        }
+        
+        if (isYawActive)
+        {
+            float newYawAngle = Mathf.Lerp(startYawAngle, endYawAngle, yawCurve.Evaluate((Time.time - startYawTime) / fullYawTime));
+            if (newYawAngle >= endYawAngle)
+            {
+                // Restart the curve
+                startYawTime = Time.time;
+            }
+            else
+            {
+                Vector3 eulerAngles = transform.eulerAngles;
+                float deltaAngle = newYawAngle - eulerAngles.y;
+                transform.RotateAround(yawPivot.transform.position, Vector3.up, deltaAngle);
+            }
+        }
+    }
+
+    void StartRoll()
+    {
+        if (isRollActive)
+        {
+            return;
+        }
+
+        Debug.Log("StartRoll");
+
+        isRollActive = true;
+        startRollTime = Time.time;
+    }
+
+    void EndRoll()
+    {
+        Debug.Log("EndRoll");
+        isRollActive = false;
+    }
+
+    void StartYaw()
+    {
+        if (isYawActive)
+        {
+            return;
+        }
+
+        Debug.Log("StartYaw");
+
+        isYawActive = true;
+        startYawTime = Time.time;
+    }
+
+    void EndYaw()
+    {
+        Debug.Log("EndYaw");
+
+        isYawActive = false;
     }
 
     public void OnPlayerDeath()
@@ -43,7 +156,6 @@ public class VehicleRenderController : MonoBehaviour
         }
 
         // TODO: Who should be reporting this?
-        GameSession gameSession = FindObjectOfType<GameSession>();
         gameSession.PlayerDied();
 
         Destroy(gameObject);

@@ -15,17 +15,31 @@ public class SegmentSpawner : MonoBehaviour
     private int numSegmentsSpawned = 0;
     private bool isSpawning;
 
-    GameSession gameSession;
-    ResourceManager resourceManager;
-    VehiclePhysicsController vehiclePhysicsController;
+    private GameSession gameSession;
+    private ResourceManager resourceManager;
+    private VehiclePhysicsController vehiclePhysicsController;
 
     void Start()
     {
         gameSession = FindObjectOfType<GameSession>();
-        resourceManager = FindObjectOfType<ResourceManager>();
-        vehiclePhysicsController = FindObjectOfType<VehiclePhysicsController>();
+        if (gameSession == null)
+        {
+            throw new System.Exception($"Unable to find object of type {nameof(GameSession)}");
+        }
 
-        StartSpawning();
+        resourceManager = FindObjectOfType<ResourceManager>();
+        if (resourceManager == null)
+        {
+            throw new System.Exception($"Unable to find object of type {nameof(ResourceManager)}");
+        }
+
+        vehiclePhysicsController = FindObjectOfType<VehiclePhysicsController>();
+        if (vehiclePhysicsController == null)
+        {
+            throw new System.Exception($"Unable to find object of type {nameof(VehiclePhysicsController)}");
+        }
+
+        isSpawning = true;
     }
 
     void Update()
@@ -55,28 +69,6 @@ public class SegmentSpawner : MonoBehaviour
         }
     }
 
-    public void StartSpawning()
-    {
-        if (isSpawning)
-        {
-            throw new System.Exception("Spawning already started");
-        }
-
-        isSpawning = true;
-
-        SpawnStartSegment();
-    }
-
-    public void StopSpawning()
-    {
-        if (false == isSpawning)
-        {
-            throw new System.Exception("Spawning not started");
-        }
-
-        isSpawning = false;
-    }
-
     void SpawnStartSegment()
     {
         GameObject road = resourceManager.GetOrCreateRoad();
@@ -99,8 +91,12 @@ public class SegmentSpawner : MonoBehaviour
         int difficultyLevel = GetDifficultyLevel();
 
         SpawnRoad(difficultyLevel, segmentPosition);
-        SpawnTowers(difficultyLevel, segmentPosition);
-        SpawnCoins(segmentPosition);
+        
+        if (numSegmentsSpawned > 0)
+        {
+            SpawnTowers(difficultyLevel, segmentPosition);
+            SpawnCoins(segmentPosition);
+        }
 
         numSegmentsSpawned++;
     }
@@ -270,6 +266,9 @@ public class SegmentSpawner : MonoBehaviour
         {
             GameObject coin = resourceManager.GetOrCreateCoin();
             coin.transform.position = new Vector3(segmentPosition.x, segmentPosition.y, z);
+
+            // Ensure coin animations remain synchronized
+            coin.transform.rotation = Quaternion.identity;
         }
     }
 

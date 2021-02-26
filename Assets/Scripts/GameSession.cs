@@ -6,10 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class GameSession : MonoBehaviour
 {
-    int currentTowers;
-    int currentCoins;
-    int bestTowers;
-    int bestCoins;
+    private int currentTowers;
+    private int currentCoins;
+    private int bestTowers;
+    private int bestCoins;
 
     void Awake()
     {
@@ -33,6 +33,7 @@ public class GameSession : MonoBehaviour
     // TODO: Use a proper event for this
     public void IntroComplete()
     {
+        // GameSession lives across scenes, so look for a new object each time
         VehiclePhysicsController vehiclePhysicsController = FindObjectOfType<VehiclePhysicsController>();
         vehiclePhysicsController.OnGameStarted();
     }
@@ -40,6 +41,7 @@ public class GameSession : MonoBehaviour
     // TODO: Use a proper event for this
     public void PlayerDied()
     {
+        // GameSession lives across scenes, so look for a new object each time
         SceneLoader sceneLoader = FindObjectOfType<SceneLoader>();
         sceneLoader.LoadGameWithDelay();
     }
