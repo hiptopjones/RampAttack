@@ -45,20 +45,6 @@ public class VehiclePhysicsController : MonoBehaviour
         {
             return;
         }
-
-        // TODO: Move this to the render twin
-        //for (int i = 0; i < wheelColliders.Length; i++)
-        //{
-        //    WheelCollider wheelCollider = wheelColliders[i];
-        //    GameObject wheelMesh = wheelMeshes[i];
-
-        //    // Make the mesh track the colliders
-        //    Quaternion rotation;
-        //    Vector3 position;
-        //    wheelCollider.GetWorldPose(out position, out rotation);
-        //    wheelMesh.transform.position = position;
-        //    wheelMesh.transform.rotation = rotation;
-        //}
     }
 
     void FixedUpdate()
@@ -162,10 +148,13 @@ public class VehiclePhysicsController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log("VehiclePhysicsController: OnTriggerEnter: " + other.name);
-
-        if (other.tag == "Obstacle")
+        if (other.CompareTag("Obstacle"))
         {
+            // Stop everything
+            isRunning = false;
+            vehicleRigidbody.velocity = Vector3.zero;
+
+            // Notify the render twin
             vehicleRenderController.OnPlayerDeath();
         }
     }

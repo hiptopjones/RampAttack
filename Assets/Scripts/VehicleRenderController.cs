@@ -57,6 +57,21 @@ public class VehicleRenderController : MonoBehaviour
         transform.position = vehiclePhysicsController.transform.position;
         transform.rotation = vehiclePhysicsController.transform.rotation;
 
+        // TODO: Wheels should appear to rotate in sync with the wheel colliders
+        // (This is the code originall used by the physics twin)
+        //for (int i = 0; i < wheelColliders.Length; i++)
+        //{
+        //    WheelCollider wheelCollider = wheelColliders[i];
+        //    GameObject wheelMesh = wheelMeshes[i];
+
+        //    // Make the mesh track the colliders
+        //    Quaternion rotation;
+        //    Vector3 position;
+        //    wheelCollider.GetWorldPose(out position, out rotation);
+        //    wheelMesh.transform.position = position;
+        //    wheelMesh.transform.rotation = rotation;
+        //}
+
         if (vehiclePhysicsController.IsAirborne())
         {
             // TODO: Activate separate objects to handle the tricks and get the code out of this class

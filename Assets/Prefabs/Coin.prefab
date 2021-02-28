@@ -46,9 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 0.75
-  explosionPrefab: {fileID: 2070965499049644864, guid: bd5b321847a170846b64f3d3f989f162,
-    type: 3}
-  explosionTimeToLive: 2
+  collectionTime: 0.3
+  isBeingCollected: 0
+  startTime: 0
+  startPosition: {x: 0, y: 0, z: 0}
 --- !u!136 &1356514176
 CapsuleCollider:
   m_ObjectHideFlags: 0
