@@ -9,6 +9,7 @@ public class FuelManager : MonoBehaviour
 
     private GameSession gameSession;
     private VehicleRenderController vehicleRenderController;
+    private VehiclePhysicsController vehiclePhysicsController;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +26,12 @@ public class FuelManager : MonoBehaviour
             throw new System.Exception($"Unable to find object of type {nameof(VehicleRenderController)}");
         }
 
+        vehiclePhysicsController = FindObjectOfType<VehiclePhysicsController>();
+        if (vehiclePhysicsController == null)
+        {
+            throw new System.Exception($"Unable to find object of type {nameof(VehiclePhysicsController)}");
+        }
+
         gameSession.SetMaxFuel(maxFuel);
         gameSession.SetCurrentFuel(maxFuel);
     }
@@ -32,6 +39,17 @@ public class FuelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (vehiclePhysicsController == null || vehicleRenderController == null)
+        {
+            return;
+        }
+
+        // Don't burn fuel if physics isn't running
+        if (false == vehiclePhysicsController.IsRunning())
+        {
+            return;
+        }
+
         float currentFuel = gameSession.GetCurrentFuel() - Time.deltaTime * fuelBurnSpeed;
         gameSession.SetCurrentFuel(currentFuel);
 

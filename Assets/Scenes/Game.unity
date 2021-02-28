@@ -1041,7 +1041,6 @@ MonoBehaviour:
   enableFollowRotation: 0
   followRotationAngle: 20
   rotationDamping: 2
-  enableLookAt: 0
 --- !u!1 &992236422
 GameObject:
   m_ObjectHideFlags: 0
@@ -1073,7 +1072,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8ab662d49d6cca40a33348996748d59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiOffset: {x: 3, y: 3, z: -5.5}
+  uiOffset: {x: 19, y: 6, z: -4}
 --- !u!23 &992236424
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2040,6 +2039,11 @@ PrefabInstance:
       propertyPath: targetCamera
       value: 
       objectReference: {fileID: 963194228}
+    - target: {fileID: 567722566193209495, guid: 26805c6c29202714cbc0f96e0b10966c,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4373679328736967285, guid: 26805c6c29202714cbc0f96e0b10966c,
         type: 3}
       propertyPath: m_RootOrder
