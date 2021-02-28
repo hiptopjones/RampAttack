@@ -7,17 +7,17 @@ public class FuelManager : MonoBehaviour
     [SerializeField] float maxFuel;
     [SerializeField] float fuelBurnSpeed;
 
-    private GameSession gameSession;
+    private GameManager gameManager;
     private VehicleRenderController vehicleRenderController;
     private VehiclePhysicsController vehiclePhysicsController;
 
     // Start is called before the first frame update
     void Start()
     {
-        gameSession = FindObjectOfType<GameSession>();
-        if (gameSession == null)
+        gameManager = FindObjectOfType<GameManager>();
+        if (gameManager == null)
         {
-            throw new System.Exception($"Unable to find object of type {nameof(GameSession)}");
+            throw new System.Exception($"Unable to find object of type {nameof(GameManager)}");
         }
 
         vehicleRenderController = FindObjectOfType<VehicleRenderController>();
@@ -32,8 +32,8 @@ public class FuelManager : MonoBehaviour
             throw new System.Exception($"Unable to find object of type {nameof(VehiclePhysicsController)}");
         }
 
-        gameSession.SetMaxFuel(maxFuel);
-        gameSession.SetCurrentFuel(maxFuel);
+        gameManager.SetMaxFuel(maxFuel);
+        gameManager.SetCurrentFuel(maxFuel);
     }
 
     // Update is called once per frame
@@ -50,9 +50,10 @@ public class FuelManager : MonoBehaviour
             return;
         }
 
-        float currentFuel = gameSession.GetCurrentFuel() - Time.deltaTime * fuelBurnSpeed;
-        gameSession.SetCurrentFuel(currentFuel);
+        float currentFuel = gameManager.GetCurrentFuel() - Time.deltaTime * fuelBurnSpeed;
+        gameManager.SetCurrentFuel(currentFuel);
 
+        // TODO: Should play a warning sound (fast beep?) shortly before we run out (maybe flash the UI display?)
         if (currentFuel < 0)
         {
             vehicleRenderController.OnPlayerDeath();

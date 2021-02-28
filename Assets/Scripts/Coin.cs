@@ -8,7 +8,7 @@ public class Coin : MonoBehaviour
     [SerializeField] float collectionTime = 1f;
 
     private ResourceManager resourceManager;
-    private GameSession gameSession;
+    private GameManager gameManager;
     private CoinCollector coinCollector;
 
     [SerializeField] bool isBeingCollected;
@@ -17,10 +17,10 @@ public class Coin : MonoBehaviour
 
     void Start()
     {
-        gameSession = FindObjectOfType<GameSession>();
-        if (gameSession == null)
+        gameManager = FindObjectOfType<GameManager>();
+        if (gameManager == null)
         {
-            throw new System.Exception($"Unable to find object of type {nameof(GameSession)}");
+            throw new System.Exception($"Unable to find object of type {nameof(GameManager)}");
         }
 
         resourceManager = FindObjectOfType<ResourceManager>();
@@ -54,7 +54,7 @@ public class Coin : MonoBehaviour
             {
                 isBeingCollected = false;
 
-                gameSession.AddCoins(1);
+                gameManager.AddCoins(1);
                 resourceManager.DestroyCoin(gameObject);
             }
         }

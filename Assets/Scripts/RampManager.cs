@@ -86,15 +86,7 @@ public class RampManager : MonoBehaviour
             }
             else if (false == isRampPlaced)
             {
-                if (Input.GetKeyUp(KeyCode.Alpha1))
-                {
-                    isRampPlaced = true;
-                }
-                else if (Input.GetKeyUp(KeyCode.Alpha2))
-                {
-                    isRampPlaced = true;
-                }
-                else if (Input.GetKeyUp(KeyCode.Alpha3))
+                if (Input.GetKeyUp(rampKeyCode))
                 {
                     isRampPlaced = true;
                 }

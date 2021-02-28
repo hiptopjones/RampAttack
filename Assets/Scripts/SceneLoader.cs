@@ -31,13 +31,6 @@ public class SceneLoader : MonoBehaviour
     public void LoadGame()
     {
         SceneManager.LoadScene("Game");
-
-        // GameSession lives across scenes, so look for a new object each time
-        GameSession gameSession = FindObjectOfType<GameSession>();
-        if (gameSession != null)
-        {
-            gameSession.ResetGame();
-        }
     }
 
     public void QuitGame()

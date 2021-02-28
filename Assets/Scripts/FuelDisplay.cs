@@ -9,7 +9,7 @@ public class FuelDisplay : MonoBehaviour
     [SerializeField] Image fill;
 
     private Slider slider;
-    private GameSession gameSession;
+    private GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
@@ -20,18 +20,18 @@ public class FuelDisplay : MonoBehaviour
             throw new System.Exception($"Unable to get component of type {nameof(Slider)}");
         }
 
-        gameSession = FindObjectOfType<GameSession>();
-        if (gameSession == null)
+        gameManager = FindObjectOfType<GameManager>();
+        if (gameManager == null)
         {
-            throw new System.Exception($"Unable to find object of type {nameof(GameSession)}");
+            throw new System.Exception($"Unable to find object of type {nameof(GameManager)}");
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        slider.maxValue = gameSession.GetMaxFuel();
-        slider.value = gameSession.GetCurrentFuel();
+        slider.maxValue = gameManager.GetMaxFuel();
+        slider.value = gameManager.GetCurrentFuel();
         fill.color = gradient.Evaluate(slider.normalizedValue);
     }
 }

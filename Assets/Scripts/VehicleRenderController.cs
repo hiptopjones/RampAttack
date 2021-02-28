@@ -27,16 +27,16 @@ public class VehicleRenderController : MonoBehaviour
     private float endYawAngle = 360;
     private float fullYawTime = 1;
 
-    private GameSession gameSession;
+    private GameManager gameManager;
     private VehiclePhysicsController vehiclePhysicsController;
     
     // Start is called before the first frame update
     void Start()
     {
-        gameSession = FindObjectOfType<GameSession>();
-        if (gameSession == null)
+        gameManager = FindObjectOfType<GameManager>();
+        if (gameManager == null)
         {
-            throw new System.Exception($"Unable to find object of type {nameof(GameSession)}");
+            throw new System.Exception($"Unable to find object of type {nameof(GameManager)}");
         }
 
         vehiclePhysicsController = FindObjectOfType<VehiclePhysicsController>();
@@ -173,7 +173,7 @@ public class VehicleRenderController : MonoBehaviour
         }
 
         // TODO: Who should be reporting this?
-        gameSession.PlayerDied();
+        gameManager.PlayerDied();
 
         Destroy(vehiclePhysicsController);
         Destroy(gameObject);

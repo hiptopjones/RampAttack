@@ -10,8 +10,8 @@ public class IntroDisplay : MonoBehaviour
     [SerializeField] int startFontSize;
     [SerializeField] int endFontSize;
 
-    private GameSession gameSession;
     private TextMeshProUGUI introText;
+
     private float textStartTime;
 
     void Start()
@@ -21,24 +21,30 @@ public class IntroDisplay : MonoBehaviour
         {
             throw new System.Exception($"Unable to get component of type {nameof(TextMeshProUGUI)}");
         }
-
-        gameSession = FindObjectOfType<GameSession>();
-        if (gameSession == null)
-        {
-            throw new System.Exception($"Unable to find object of type {nameof(GameSession)}");
-        }
-
-        StartCoroutine(ReadySetGo());
     }
 
     void Update()
     {
-        float currentFontSize = Mathf.Lerp(startFontSize, endFontSize, Time.time - textStartTime);
+        if (false == introText.enabled)
+        {
+            return;
+        }
+
+        
+        float currentFontSize = Mathf.Lerp(startFontSize, endFontSize, (Time.time - textStartTime) / textInterval);
         introText.fontSize = currentFontSize;
     }
 
-    private IEnumerator ReadySetGo()
+    public IEnumerator ReadySetGo()
     {
+        // If the coroutine is running before Start() got called, just wait longer
+        if (introText == null)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        introText.enabled = true;
+
         SetText("Ready!");
         yield return new WaitForSeconds(textInterval);
         SetText("Set!");
@@ -47,8 +53,7 @@ public class IntroDisplay : MonoBehaviour
         yield return new WaitForSeconds(textInterval);
         SetText(string.Empty);
 
-        // Let the session manager know we're done
-        gameSession.IntroComplete();
+        introText.enabled = false;
     }
 
     private void SetText(string text)

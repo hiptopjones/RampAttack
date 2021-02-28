@@ -4,8 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameSession : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
+    [SerializeField] float timeScale = 1.5f;
+
+    IntroDisplay introDisplay;
+    VehiclePhysicsController vehiclePhysicsController;
+    SceneLoader sceneLoader;
+
     private int currentTowers;
     private int currentCoins;
     private int bestTowers;
@@ -14,38 +20,41 @@ public class GameSession : MonoBehaviour
     private float maxFuel;
     private float currentFuel;
 
-    void Awake()
-    {
-        int numThings = FindObjectsOfType<GameSession>().Length;
-        if (numThings > 1)
-        {
-            gameObject.SetActive(false);
-            Destroy(gameObject);
-        }
-        else
-        {
-            DontDestroyOnLoad(gameObject);
-        }
-    }
-
     void Start()
     {
-        Time.timeScale = 1.5f;
+        introDisplay = FindObjectOfType<IntroDisplay>();
+        if (introDisplay == null)
+        {
+            throw new System.Exception($"Unable to find object of type {nameof(IntroDisplay)}");
+        }
+
+        vehiclePhysicsController = FindObjectOfType<VehiclePhysicsController>();
+        if (vehiclePhysicsController == null)
+        {
+            throw new System.Exception($"Unable to find object of type {nameof(VehiclePhysicsController)}");
+        }
+
+        sceneLoader = FindObjectOfType<SceneLoader>();
+        if (sceneLoader == null)
+        {
+            throw new System.Exception($"Unable to find object of type {nameof(SceneLoader)}");
+        }
+
+        Time.timeScale = timeScale;
+
+        StartCoroutine(StartGame());
     }
 
-    // TODO: Use a proper event for this
-    public void IntroComplete()
+    IEnumerator StartGame()
     {
-        // GameSession lives across scenes, so look for a new object each time
-        VehiclePhysicsController vehiclePhysicsController = FindObjectOfType<VehiclePhysicsController>();
-        vehiclePhysicsController.OnGameStarted();
+        yield return StartCoroutine(introDisplay.ReadySetGo());
+        
+        vehiclePhysicsController.StartPhysics();
     }
 
     // TODO: Use a proper event for this
     public void PlayerDied()
     {
-        // GameSession lives across scenes, so look for a new object each time
-        SceneLoader sceneLoader = FindObjectOfType<SceneLoader>();
         sceneLoader.LoadGameWithDelay();
     }
 

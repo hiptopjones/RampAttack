@@ -8,7 +8,7 @@ public class TowerDisplay : MonoBehaviour
     [SerializeField] bool isBest;
 
     private TextMeshProUGUI towerText;
-    private GameSession gameSession;
+    private GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
@@ -19,16 +19,16 @@ public class TowerDisplay : MonoBehaviour
             throw new System.Exception($"Unable to get component of type {nameof(TextMeshProUGUI)}");
         }
 
-        gameSession = FindObjectOfType<GameSession>();
-        if (gameSession == null)
+        gameManager = FindObjectOfType<GameManager>();
+        if (gameManager == null)
         {
-            throw new System.Exception($"Unable to find object of type {nameof(GameSession)}");
+            throw new System.Exception($"Unable to find object of type {nameof(GameManager)}");
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        towerText.text = isBest ? gameSession.GetBestTowers().ToString() : gameSession.GetCurrentTowers().ToString();
+        towerText.text = isBest ? gameManager.GetBestTowers().ToString() : gameManager.GetCurrentTowers().ToString();
     }
 }

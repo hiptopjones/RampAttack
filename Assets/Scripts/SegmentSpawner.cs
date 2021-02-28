@@ -15,16 +15,16 @@ public class SegmentSpawner : MonoBehaviour
     private int numSegmentsSpawned = 0;
     private bool isSpawning;
 
-    private GameSession gameSession;
+    private GameManager gameManager;
     private ResourceManager resourceManager;
     private VehiclePhysicsController vehiclePhysicsController;
 
     void Start()
     {
-        gameSession = FindObjectOfType<GameSession>();
-        if (gameSession == null)
+        gameManager = FindObjectOfType<GameManager>();
+        if (gameManager == null)
         {
-            throw new System.Exception($"Unable to find object of type {nameof(GameSession)}");
+            throw new System.Exception($"Unable to find object of type {nameof(GameManager)}");
         }
 
         resourceManager = FindObjectOfType<ResourceManager>();
@@ -56,7 +56,7 @@ public class SegmentSpawner : MonoBehaviour
         // TODO: This shouldn't be done here, but it's the most convenient place for now
         // because it is where segment length is defined
         int numSegmentsCleared = (int)((playerCurrentPosition.z - startSpawnPosition.z) / segmentLength);
-        gameSession.SetTowers(numSegmentsCleared);
+        gameManager.SetTowers(numSegmentsCleared);
 
         if (isSpawning)
         {

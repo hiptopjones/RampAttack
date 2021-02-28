@@ -451,7 +451,7 @@ PrefabInstance:
     - target: {fileID: 7002836557933709451, guid: 3c5aa3776ff531b47b4bd8e2d028da68,
         type: 3}
       propertyPath: m_Name
-      value: Game Session
+      value: Game Manager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c5aa3776ff531b47b4bd8e2d028da68, type: 3}
@@ -1744,7 +1744,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1809759794}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
@@ -1756,7 +1756,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Ready!
+  m_text: FOO!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 481d6ec43a80a044584218f2d0fb89ed, type: 2}
   m_sharedMaterial: {fileID: -8757014520599697777, guid: 481d6ec43a80a044584218f2d0fb89ed,

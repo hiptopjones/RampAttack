@@ -138,7 +138,7 @@ public class VehiclePhysicsController : MonoBehaviour
         return isRunning;
     }
 
-    public void OnGameStarted()
+    public void StartPhysics()
     {
         isRunning = true;
 
