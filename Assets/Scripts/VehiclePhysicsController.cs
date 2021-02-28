@@ -167,7 +167,6 @@ public class VehiclePhysicsController : MonoBehaviour
         if (other.tag == "Obstacle")
         {
             vehicleRenderController.OnPlayerDeath();
-            Destroy(gameObject);
         }
     }
 }

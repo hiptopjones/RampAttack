@@ -11,6 +11,9 @@ public class GameSession : MonoBehaviour
     private int bestTowers;
     private int bestCoins;
 
+    private float maxFuel;
+    private float currentFuel;
+
     void Awake()
     {
         int numThings = FindObjectsOfType<GameSession>().Length;
@@ -84,9 +87,30 @@ public class GameSession : MonoBehaviour
         }
     }
 
+    public void SetCurrentFuel(float currentFuel)
+    {
+        this.currentFuel = currentFuel;
+    }
+
+    public float GetCurrentFuel()
+    {
+        return currentFuel;
+    }
+
+    public void SetMaxFuel(float maxFuel)
+    {
+        this.maxFuel = maxFuel;
+    }
+
+    public float GetMaxFuel()
+    {
+        return maxFuel;
+    }
+
     public void ResetGame()
     {
         currentTowers = 0;
         currentCoins = 0;
+        currentFuel = 0;
     }
 }

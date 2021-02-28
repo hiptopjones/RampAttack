@@ -59,6 +59,8 @@ public class VehicleRenderController : MonoBehaviour
 
         if (vehiclePhysicsController.IsAirborne())
         {
+            // TODO: Activate separate objects to handle the tricks and get the code out of this class
+
             if (Input.GetKey(KeyCode.Space))
             {
                 StartRoll();
@@ -158,6 +160,7 @@ public class VehicleRenderController : MonoBehaviour
         // TODO: Who should be reporting this?
         gameSession.PlayerDied();
 
+        Destroy(vehiclePhysicsController);
         Destroy(gameObject);
     }
 }

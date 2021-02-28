@@ -7,8 +7,10 @@ public class GhostRamp : MonoBehaviour
     [SerializeField] float ghostOffset;
 
     private ResourceManager resourceManager;
-    private MeshRenderer meshRenderer;
     private VehiclePhysicsController vehiclePhysicsController;
+
+    private GameObject ramp;
+    private KeyCode keyCode;
 
     private bool isRampPlaced = false;
 
@@ -19,12 +21,6 @@ public class GhostRamp : MonoBehaviour
         if (resourceManager == null)
         {
             throw new System.Exception($"Unable to find object of type {nameof(ResourceManager)}");
-        }
-
-        meshRenderer = GetComponentInChildren<MeshRenderer>();
-        if (meshRenderer == null)
-        {
-            throw new System.Exception($"Unable to get component in children of type {nameof(MeshRenderer)}");
         }
 
         vehiclePhysicsController = FindObjectOfType<VehiclePhysicsController>();
@@ -42,58 +38,59 @@ public class GhostRamp : MonoBehaviour
             return;
         }
 
-        // Ensure the ghost always shows in the right place
-        transform.position = vehiclePhysicsController.transform.position + Vector3.forward * ghostOffset;
-
         // Prevent any ramps before the player starts moving
         if (false == vehiclePhysicsController.IsRunning())
         {
             return;
         }
 
-        if (isRampPlaced)
+        if (vehiclePhysicsController.IsGrounded())
         {
-            if (vehiclePhysicsController.IsAirborne())
+            if (ramp == null)
             {
-                isRampPlaced = false;
-            }
-        }
-        else
-        {
-            if (vehiclePhysicsController.IsGrounded())
-            {
-                GameObject ramp = null;
-
-                if (Input.GetKeyDown(KeyCode.Alpha1))
+                if (Input.GetKey(KeyCode.Alpha1))
                 {
                     ramp = resourceManager.GetOrCreateSmallRamp();
+                    keyCode = KeyCode.Alpha1;
                 }
-                else if (Input.GetKeyDown(KeyCode.Alpha2))
+                else if (Input.GetKey(KeyCode.Alpha2))
                 {
                     ramp = resourceManager.GetOrCreateMediumRamp();
+                    keyCode = KeyCode.Alpha2;
                 }
-                else if (Input.GetKeyDown(KeyCode.Alpha3))
+                else if (Input.GetKey(KeyCode.Alpha3))
                 {
                     ramp = resourceManager.GetOrCreateLargeRamp();
-                }
-
-                if (ramp != null)
-                {
-                    ramp.transform.position = transform.position;
-                    isRampPlaced = true;
-
-                    // Disable right away to see if this prevents looking like the marker continues up the ramp
-                    meshRenderer.enabled = false;
-                }
-                else
-                {
-                    meshRenderer.enabled = true;
+                    keyCode = KeyCode.Alpha3;
                 }
             }
             else
             {
-                meshRenderer.enabled = false;
+                if (Input.GetKeyUp(KeyCode.Alpha1))
+                {
+                    isRampPlaced = true;
+                }
+                else if (Input.GetKeyUp(KeyCode.Alpha2))
+                {
+
+                    isRampPlaced = true;
+                }
+                else if (Input.GetKeyUp(KeyCode.Alpha3))
+                {
+                    isRampPlaced = true;
+                }
             }
+        }
+        else if (vehiclePhysicsController.IsAirborne())
+        {
+            isRampPlaced = false;
+            ramp = null;
+        }
+
+        if (ramp != null && false == isRampPlaced)
+        {
+            // Ensure the ghost always shows in the right place
+            ramp.transform.position = vehiclePhysicsController.transform.position + Vector3.forward * ghostOffset;
         }
     }
 }
