@@ -61,6 +61,8 @@ public class GameSession : MonoBehaviour
 
     public void AddCoins(int numCoins)
     {
+        currentFuel += numCoins;
+
         currentCoins += numCoins;
         if (currentCoins > bestCoins)
         {

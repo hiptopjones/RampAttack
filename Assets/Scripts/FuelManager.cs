@@ -10,8 +10,6 @@ public class FuelManager : MonoBehaviour
     private GameSession gameSession;
     private VehicleRenderController vehicleRenderController;
 
-    private float startTime;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -29,14 +27,12 @@ public class FuelManager : MonoBehaviour
 
         gameSession.SetMaxFuel(maxFuel);
         gameSession.SetCurrentFuel(maxFuel);
-
-        startTime = Time.time;
     }
 
     // Update is called once per frame
     void Update()
     {
-        float currentFuel = gameSession.GetMaxFuel() - (Time.time - startTime) * fuelBurnSpeed;
+        float currentFuel = gameSession.GetCurrentFuel() - Time.deltaTime * fuelBurnSpeed;
         gameSession.SetCurrentFuel(currentFuel);
 
         if (currentFuel < 0)

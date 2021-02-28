@@ -685,8 +685,18 @@ PrefabInstance:
     - target: {fileID: 572212733700842581, guid: a0964caf63e288d4189e9e64f720762b,
         type: 3}
       propertyPath: m_Name
-      value: Ghost Ramp
+      value: Ramp Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 572212733700842583, guid: a0964caf63e288d4189e9e64f720762b,
+        type: 3}
+      propertyPath: rampMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 70838b6e43fc48f48954da0e5cd79b88, type: 2}
+    - target: {fileID: 572212733700842583, guid: a0964caf63e288d4189e9e64f720762b,
+        type: 3}
+      propertyPath: ghostMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 4e1708845f4e3d648afd676b013cf880, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0964caf63e288d4189e9e64f720762b, type: 3}
 --- !u!1 &651738179
