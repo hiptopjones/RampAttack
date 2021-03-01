@@ -18,6 +18,7 @@ public class PauseManager : MonoBehaviour
 
     void Update()
     {
+        // TODO: Should just pause the game, not end it
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             sceneLoader.LoadGameOver();

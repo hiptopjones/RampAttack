@@ -39,7 +39,7 @@ public class FuelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (vehiclePhysicsController == null || vehicleRenderController == null)
+        if (gameManager == null || vehiclePhysicsController == null || vehicleRenderController == null)
         {
             return;
         }

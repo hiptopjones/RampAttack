@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -47,6 +46,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator StartGame()
     {
+        // TODO: Not convinced this sequence should be handled as a coroutine
         yield return StartCoroutine(introDisplay.ReadySetGo());
         
         vehiclePhysicsController.StartPhysics();
@@ -70,8 +70,6 @@ public class GameManager : MonoBehaviour
 
     public void AddCoins(int numCoins)
     {
-        currentFuel += numCoins;
-
         currentCoins += numCoins;
         if (currentCoins > bestCoins)
         {
