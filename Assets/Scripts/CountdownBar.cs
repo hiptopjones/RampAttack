@@ -29,14 +29,4 @@ public class CountdownBar : MonoBehaviour
         slider.value = currentTime;
         fill.color = gradient.Evaluate(slider.normalizedValue);
     }
-
-    public void Show()
-    {
-        transform.GetChild(0).gameObject.SetActive(true);
-    }
-
-    public void Hide()
-    {
-        transform.GetChild(0).gameObject.SetActive(false);
-    }
 }

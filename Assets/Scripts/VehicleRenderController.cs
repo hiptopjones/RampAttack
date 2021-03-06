@@ -124,7 +124,7 @@ public class VehicleRenderController : MonoBehaviour
         }
     }
 
-    void StartRoll()
+    public void StartRoll()
     {
         if (isRollActive)
         {
