@@ -14,7 +14,8 @@ public enum ObjectType
     CoinEffect,
     SmallRamp,
     MediumRamp,
-    LargeRamp
+    LargeRamp,
+    Building
 };
 
 public class ResourceManager : MonoBehaviour
@@ -31,6 +32,7 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] GameObject smallRampPrefab;
     [SerializeField] GameObject mediumRampPrefab;
     [SerializeField] GameObject largeRampPrefab;
+    [SerializeField] GameObject buildingPrefab;
 
     private Dictionary<ObjectType, HashSet<GameObject>> activeObjects = new Dictionary<ObjectType, HashSet<GameObject>>();
     private Dictionary<ObjectType, Stack<GameObject>> freeObjects = new Dictionary<ObjectType, Stack<GameObject>>();
@@ -56,6 +58,7 @@ public class ResourceManager : MonoBehaviour
         activeObjects[ObjectType.SmallRamp] = new HashSet<GameObject>();
         activeObjects[ObjectType.MediumRamp] = new HashSet<GameObject>();
         activeObjects[ObjectType.LargeRamp] = new HashSet<GameObject>();
+        activeObjects[ObjectType.Building] = new HashSet<GameObject>();
 
         freeObjects[ObjectType.Road] = new Stack<GameObject>();
         freeObjects[ObjectType.Arch1] = new Stack<GameObject>();
@@ -66,6 +69,7 @@ public class ResourceManager : MonoBehaviour
         freeObjects[ObjectType.SmallRamp] = new Stack<GameObject>();
         freeObjects[ObjectType.MediumRamp] = new Stack<GameObject>();
         freeObjects[ObjectType.LargeRamp] = new Stack<GameObject>();
+        freeObjects[ObjectType.Building] = new Stack<GameObject>();
 
         startTime = Time.time;
     }
@@ -162,6 +166,11 @@ public class ResourceManager : MonoBehaviour
         DestroyObject(ObjectType.LargeRamp, ramp);
     }
 
+    public void DestroyBuilding(GameObject building)
+    {
+        DestroyObject(ObjectType.Building, building);
+    }
+
     private void DestroyObject(ObjectType objectType, GameObject gameObject)
     {
         gameObject.SetActive(false);
@@ -214,6 +223,11 @@ public class ResourceManager : MonoBehaviour
         return GetOrCreateObject(ObjectType.LargeRamp);
     }
 
+    public GameObject GetOrCreateBuilding()
+    {
+        return GetOrCreateObject(ObjectType.Building);
+    }
+
     public GameObject GetOrCreateObject(ObjectType objectType)
     {
         GameObject gameObject;
@@ -263,6 +277,9 @@ public class ResourceManager : MonoBehaviour
 
             case ObjectType.LargeRamp:
                 return largeRampPrefab;
+
+            case ObjectType.Building:
+                return buildingPrefab;
 
             default:
                 throw new System.Exception("Unknown object type: " + objectType);

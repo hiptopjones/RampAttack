@@ -69,14 +69,6 @@ public class SegmentSpawner : MonoBehaviour
         }
     }
 
-    void SpawnStartSegment()
-    {
-        GameObject road = resourceManager.GetOrCreateRoad();
-        road.transform.position = startSpawnPosition;
-
-        numSegmentsSpawned++;
-    }
-
     void SpawnSegment(Vector3 segmentPosition)
     {
         // Difficulty progression (for example)
@@ -91,7 +83,8 @@ public class SegmentSpawner : MonoBehaviour
         int difficultyLevel = GetDifficultyLevel();
 
         SpawnRoad(difficultyLevel, segmentPosition);
-        
+        SpawnBuildings(difficultyLevel, segmentPosition);
+
         if (numSegmentsSpawned > 0)
         {
             SpawnTowers(difficultyLevel, segmentPosition);
@@ -105,6 +98,24 @@ public class SegmentSpawner : MonoBehaviour
     {
         GameObject road = resourceManager.GetOrCreateRoad();
         road.transform.position = segmentPosition;
+    }
+
+    void SpawnBuildings(int difficultyLevel, Vector3 segmentPosition)
+    {
+        const int numBuildings = 5;
+        const float buildingWidth = 8;
+        const float buildingDepth = 8;
+        const float buildingGap = 2;
+        const float buildingSetback = 10;
+
+        for (int i = 0; i < numBuildings; i++)
+        {
+            float buildingHeight = Random.Range(8, 20);
+
+            GameObject building = resourceManager.GetOrCreateBuilding();
+            building.transform.position = new Vector3(buildingSetback, buildingHeight / 2, segmentPosition.z + (buildingDepth + buildingGap) * i);
+            building.transform.localScale = new Vector3(buildingWidth, buildingHeight, buildingDepth);
+        }
     }
 
     void SpawnTowers(int difficultyLevel, Vector3 segmentPosition)
