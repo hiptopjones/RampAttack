@@ -8,6 +8,7 @@ public class TrickManager : MonoBehaviour
     private GameManager gameManager;
     private VehicleRenderController vehicleRenderController;
     private VehiclePhysicsController vehiclePhysicsController;
+    private ResourceManager resourceManager;
     private KeyComboPrompt keyComboPrompt;
 
     private bool isCountdownActive;
@@ -45,6 +46,12 @@ public class TrickManager : MonoBehaviour
         if (vehiclePhysicsController == null)
         {
             throw new System.Exception($"Unable to find object of type {nameof(VehiclePhysicsController)}");
+        }
+
+        resourceManager = FindObjectOfType<ResourceManager>();
+        if (resourceManager == null)
+        {
+            throw new System.Exception($"Unable to find object of type {nameof(ResourceManager)}");
         }
 
         keyComboPrompt = FindObjectOfType<KeyComboPrompt>();
@@ -101,6 +108,7 @@ public class TrickManager : MonoBehaviour
                 currentKeyComboIndex++;
                 if (currentKeyComboIndex >= keyCombo.Length)
                 {
+                    // Nailed it!
                     DoTrick();
 
                     isCountdownActive = false;
@@ -157,5 +165,18 @@ public class TrickManager : MonoBehaviour
     private void DoTrick()
     {
         vehicleRenderController.StartRoll();
+        StartCoroutine(SpawnAndCollectCoins(5));
+    }
+
+    private IEnumerator SpawnAndCollectCoins(int numCoins)
+    {
+        for (int i = 0; i < numCoins; i++)
+        {
+            Coin coin = resourceManager.GetOrCreateCoin().GetComponent<Coin>();
+            coin.transform.position = vehiclePhysicsController.transform.position;
+            coin.CollectCoin();
+
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 }

@@ -5565,6 +5565,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6419655735801174989, guid: 38b580129bae0a84988569873ee175f2,
         type: 3}
+    - target: {fileID: 5361470884593887454, guid: ff0cd2ed4faa0cb4da73d35f62e2def8,
+        type: 3}
+      propertyPath: checkpointPrefab
+      value: 
+      objectReference: {fileID: 1623273639727311197, guid: de2ee172e5698864fa613810496efee0,
+        type: 3}
     - target: {fileID: 5361470884593887455, guid: ff0cd2ed4faa0cb4da73d35f62e2def8,
         type: 3}
       propertyPath: m_RootOrder

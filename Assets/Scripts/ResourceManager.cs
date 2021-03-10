@@ -15,7 +15,8 @@ public enum ObjectType
     SmallRamp,
     MediumRamp,
     LargeRamp,
-    Building
+    Building,
+    Checkpoint
 };
 
 public class ResourceManager : MonoBehaviour
@@ -33,6 +34,7 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] GameObject mediumRampPrefab;
     [SerializeField] GameObject largeRampPrefab;
     [SerializeField] GameObject buildingPrefab;
+    [SerializeField] GameObject checkpointPrefab;
 
     private Dictionary<ObjectType, HashSet<GameObject>> activeObjects = new Dictionary<ObjectType, HashSet<GameObject>>();
     private Dictionary<ObjectType, Stack<GameObject>> freeObjects = new Dictionary<ObjectType, Stack<GameObject>>();
@@ -59,6 +61,7 @@ public class ResourceManager : MonoBehaviour
         activeObjects[ObjectType.MediumRamp] = new HashSet<GameObject>();
         activeObjects[ObjectType.LargeRamp] = new HashSet<GameObject>();
         activeObjects[ObjectType.Building] = new HashSet<GameObject>();
+        activeObjects[ObjectType.Checkpoint] = new HashSet<GameObject>();
 
         freeObjects[ObjectType.Road] = new Stack<GameObject>();
         freeObjects[ObjectType.Arch1] = new Stack<GameObject>();
@@ -70,6 +73,7 @@ public class ResourceManager : MonoBehaviour
         freeObjects[ObjectType.MediumRamp] = new Stack<GameObject>();
         freeObjects[ObjectType.LargeRamp] = new Stack<GameObject>();
         freeObjects[ObjectType.Building] = new Stack<GameObject>();
+        freeObjects[ObjectType.Checkpoint] = new Stack<GameObject>();
 
         startTime = Time.time;
     }
@@ -171,6 +175,11 @@ public class ResourceManager : MonoBehaviour
         DestroyObject(ObjectType.Building, building);
     }
 
+    public void DestroyCheckpoint(GameObject checkpoint)
+    {
+        DestroyObject(ObjectType.Checkpoint, checkpoint);
+    }
+
     private void DestroyObject(ObjectType objectType, GameObject gameObject)
     {
         gameObject.SetActive(false);
@@ -228,6 +237,11 @@ public class ResourceManager : MonoBehaviour
         return GetOrCreateObject(ObjectType.Building);
     }
 
+    public GameObject GetOrCreateCheckpoint()
+    {
+        return GetOrCreateObject(ObjectType.Checkpoint);
+    }
+
     public GameObject GetOrCreateObject(ObjectType objectType)
     {
         GameObject gameObject;
@@ -280,6 +294,9 @@ public class ResourceManager : MonoBehaviour
 
             case ObjectType.Building:
                 return buildingPrefab;
+
+            case ObjectType.Checkpoint:
+                return checkpointPrefab;
 
             default:
                 throw new System.Exception("Unknown object type: " + objectType);

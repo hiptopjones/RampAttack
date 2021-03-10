@@ -87,8 +87,15 @@ public class SegmentSpawner : MonoBehaviour
 
         if (numSegmentsSpawned > 0)
         {
-            SpawnTowers(difficultyLevel, segmentPosition);
-            SpawnCoins(segmentPosition);
+            if (numSegmentsSpawned % 5 == 0)
+            {
+                SpawnCheckpoint(difficultyLevel, segmentPosition);
+            }
+            else
+            {
+                SpawnTowers(difficultyLevel, segmentPosition);
+                //SpawnCoins(segmentPosition);
+            }
         }
 
         numSegmentsSpawned++;
@@ -106,7 +113,7 @@ public class SegmentSpawner : MonoBehaviour
         const float buildingWidth = 8;
         const float buildingDepth = 8;
         const float buildingGap = 2;
-        const float buildingSetback = 10;
+        const float buildingSetback = 12;
 
         for (int i = 0; i < numBuildings; i++)
         {
@@ -116,6 +123,12 @@ public class SegmentSpawner : MonoBehaviour
             building.transform.position = new Vector3(buildingSetback, buildingHeight / 2, segmentPosition.z + (buildingDepth + buildingGap) * i);
             building.transform.localScale = new Vector3(buildingWidth, buildingHeight, buildingDepth);
         }
+    }
+
+    void SpawnCheckpoint(int difficultyLevel, Vector3 segmentPosition)
+    {
+        GameObject checkpoint = resourceManager.GetOrCreateCheckpoint();
+        checkpoint.transform.position = segmentPosition;
     }
 
     void SpawnTowers(int difficultyLevel, Vector3 segmentPosition)

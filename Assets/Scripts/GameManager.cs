@@ -68,6 +68,11 @@ public class GameManager : MonoBehaviour
         return bestCoins;
     }
 
+    public void SetCurrentCoins(int coins)
+    {
+        currentCoins = coins;
+    }
+
     public void AddCoins(int numCoins)
     {
         currentCoins += numCoins;

@@ -9,6 +9,7 @@ TagManager:
   - Obstacle
   - Undefined
   - Ramp
+  - Checkpoint
   layers:
   - Default
   - TransparentFX

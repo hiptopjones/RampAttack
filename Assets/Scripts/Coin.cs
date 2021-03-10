@@ -11,9 +11,9 @@ public class Coin : MonoBehaviour
     private GameManager gameManager;
     private CoinCollector coinCollector;
 
-    [SerializeField] bool isBeingCollected;
-    [SerializeField] float startTime;
-    [SerializeField] Vector3 startPosition;
+    private bool isBeingCollected;
+    private float startTime;
+    private Vector3 startPosition;
 
     void Start()
     {
@@ -60,13 +60,18 @@ public class Coin : MonoBehaviour
         }
     }
 
+    public void CollectCoin()
+    {
+        isBeingCollected = true;
+        startTime = Time.time;
+        startPosition = transform.position;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            isBeingCollected = true;
-            startTime = Time.time;
-            startPosition = transform.position;
+            CollectCoin();
         }
     }
 }
