@@ -2937,11 +2937,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fba39fb0e4d833b4ea97af9550d71626, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 0.75
   collectionTime: 1
-  isBeingCollected: 0
-  startTime: 0
-  startPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &530795375745653043
 GameObject:
   m_ObjectHideFlags: 0
@@ -3909,6 +3905,7 @@ MonoBehaviour:
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
   fill: {fileID: 1595349250145243703}
+  flashPeriod: 0.2
 --- !u!222 &1595349250127138989
 CanvasRenderer:
   m_ObjectHideFlags: 0

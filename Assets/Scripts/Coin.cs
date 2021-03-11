@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    [SerializeField] float rotationSpeed = 1f;
     [SerializeField] float collectionTime = 1f;
 
     private ResourceManager resourceManager;
@@ -38,25 +37,25 @@ public class Coin : MonoBehaviour
 
     void Update()
     {
-        transform.Rotate(transform.up, 360 * rotationSpeed * Time.deltaTime);
-
-        if (isBeingCollected)
+        if (false == isBeingCollected)
         {
-            // This changes every frame, as the collector keeps up with the player
-            Vector3 endPosition = coinCollector.transform.position;
+            return;
+        }
 
-            // TODO: Use an animation curve
-            float deltaPercent = (Time.time - startTime) / collectionTime;
-            transform.position = Vector3.Lerp(startPosition, endPosition, deltaPercent);
+        // This changes every frame, as the collector keeps up with the player
+        Vector3 endPosition = coinCollector.transform.position;
 
-            float remainingDistance = Mathf.Abs((endPosition - transform.position).magnitude);
-            if (remainingDistance < 1)
-            {
-                isBeingCollected = false;
+        // TODO: Use an animation curve
+        float deltaPercent = (Time.time - startTime) / collectionTime;
+        transform.position = Vector3.Lerp(startPosition, endPosition, deltaPercent);
 
-                gameManager.AddCoins(1);
-                resourceManager.DestroyCoin(gameObject);
-            }
+        float remainingDistance = Mathf.Abs((endPosition - transform.position).magnitude);
+        if (remainingDistance < 1)
+        {
+            isBeingCollected = false;
+
+            gameManager.AddCoins(1);
+            resourceManager.DestroyCoin(gameObject);
         }
     }
 

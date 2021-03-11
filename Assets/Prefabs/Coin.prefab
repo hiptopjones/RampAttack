@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 530795374733176080}
   - component: {fileID: 530795374733176081}
+  - component: {fileID: 5803533358839171272}
   - component: {fileID: 1356514176}
   m_Layer: 0
   m_Name: Coin
@@ -47,9 +48,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 0.75
   collectionTime: 0.3
-  isBeingCollected: 0
-  startTime: 0
-  startPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &5803533358839171272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 530795374733176083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82a6358750c496f409f49888758eb0e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 0.75
 --- !u!136 &1356514176
 CapsuleCollider:
   m_ObjectHideFlags: 0
