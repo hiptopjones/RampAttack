@@ -163,7 +163,7 @@ public class SegmentSpawner : MonoBehaviour
             float buildingHeight = Random.Range(8, 20);
 
             GameObject building = resourceManager.GetOrCreateBuilding();
-            building.transform.position = new Vector3(buildingSetback, buildingHeight / 2, segmentPosition.z + (buildingDepth + buildingGap) * i);
+            building.transform.position = segmentPosition + new Vector3(buildingSetback, buildingHeight / 2, (buildingDepth + buildingGap) * i);
             building.transform.localScale = new Vector3(buildingWidth, buildingHeight, buildingDepth);
         }
     }
@@ -335,13 +335,13 @@ public class SegmentSpawner : MonoBehaviour
 
     void SpawnCoins(Vector3 segmentPosition)
     {
-        float firstCoinZ = segmentPosition.z + segmentLength / 4;
-        float lastCoinZ = segmentPosition.z + segmentLength * 3 / 4;
+        float firstCoinZ = segmentLength / 4;
+        float lastCoinZ = segmentLength * 3 / 4;
 
         for (float z = firstCoinZ; z <= lastCoinZ; z += coinSpacing)
         {
             GameObject coin = resourceManager.GetOrCreateCoin();
-            coin.transform.position = new Vector3(segmentPosition.x, segmentPosition.y, z);
+            coin.transform.position = segmentPosition + new Vector3(0, 0, z);
 
             // Ensure coin animations remain synchronized
             coin.transform.rotation = Quaternion.identity;
