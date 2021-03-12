@@ -45,7 +45,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reclaimInterval: 10
   reclaimDistance: 80
-  roadPrefab: {fileID: 8717073647590548724, guid: 9cfb195dcf4f87844b4dc2592c55500b,
+  straightRoadPrefab: {fileID: 8717073647590548724, guid: 9cfb195dcf4f87844b4dc2592c55500b,
+    type: 3}
+  transitionRoadPrefab: {fileID: 8717073647590548724, guid: e798d75716ab3d1418e5e4beba2ee7d4,
     type: 3}
   arch1Prefab: {fileID: 230945325354732871, guid: 7310e83ffbc19a742b7dc5918f9b26c6,
     type: 3}
@@ -63,3 +65,5 @@ MonoBehaviour:
     type: 3}
   largeRampPrefab: {fileID: 4645716616724954210, guid: 6a9d570fb2b2c0c478166fdad9f810aa,
     type: 3}
+  buildingPrefab: {fileID: 0}
+  checkpointPrefab: {fileID: 0}

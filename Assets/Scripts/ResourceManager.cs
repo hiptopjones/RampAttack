@@ -6,7 +6,8 @@ using UnityEngine;
 
 public enum ObjectType
 {
-    Road,
+    StraightRoad,
+    TransitionRoad,
     Arch1,
     Arch2,
     Arch3,
@@ -24,7 +25,8 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] float reclaimInterval = 10;
     [SerializeField] float reclaimDistance = 80;
 
-    [SerializeField] GameObject roadPrefab;
+    [SerializeField] GameObject straightRoadPrefab;
+    [SerializeField] GameObject transitionRoadPrefab;
     [SerializeField] GameObject arch1Prefab;
     [SerializeField] GameObject arch2Prefab;
     [SerializeField] GameObject arch3Prefab;
@@ -51,7 +53,8 @@ public class ResourceManager : MonoBehaviour
             throw new System.Exception($"Unable to find object of type {nameof(VehiclePhysicsController)}");
         }
 
-        activeObjects[ObjectType.Road] = new HashSet<GameObject>();
+        activeObjects[ObjectType.StraightRoad] = new HashSet<GameObject>();
+        activeObjects[ObjectType.TransitionRoad] = new HashSet<GameObject>();
         activeObjects[ObjectType.Arch1] = new HashSet<GameObject>();
         activeObjects[ObjectType.Arch2] = new HashSet<GameObject>();
         activeObjects[ObjectType.Arch3] = new HashSet<GameObject>();
@@ -63,7 +66,8 @@ public class ResourceManager : MonoBehaviour
         activeObjects[ObjectType.Building] = new HashSet<GameObject>();
         activeObjects[ObjectType.Checkpoint] = new HashSet<GameObject>();
 
-        freeObjects[ObjectType.Road] = new Stack<GameObject>();
+        freeObjects[ObjectType.StraightRoad] = new Stack<GameObject>();
+        freeObjects[ObjectType.TransitionRoad] = new Stack<GameObject>();
         freeObjects[ObjectType.Arch1] = new Stack<GameObject>();
         freeObjects[ObjectType.Arch2] = new Stack<GameObject>();
         freeObjects[ObjectType.Arch3] = new Stack<GameObject>();
@@ -125,9 +129,14 @@ public class ResourceManager : MonoBehaviour
         }
     }
 
-    public void DestroyRoad(GameObject road)
+    public void DestroyStraightRoad(GameObject road)
     {
-        DestroyObject(ObjectType.Road, road);
+        DestroyObject(ObjectType.StraightRoad, road);
+    }
+
+    public void DestroyTransitionRoad(GameObject road)
+    {
+        DestroyObject(ObjectType.TransitionRoad, road);
     }
 
     public void DestroyArch1(GameObject arch)
@@ -187,9 +196,14 @@ public class ResourceManager : MonoBehaviour
         freeObjects[objectType].Push(gameObject);
     }
 
-    public GameObject GetOrCreateRoad()
+    public GameObject GetOrCreateStraightRoad()
     {
-        return GetOrCreateObject(ObjectType.Road);
+        return GetOrCreateObject(ObjectType.StraightRoad);
+    }
+
+    public GameObject GetOrCreateTransitionRoad()
+    {
+        return GetOrCreateObject(ObjectType.TransitionRoad);
     }
 
     public GameObject GetOrCreateArch1()
@@ -265,8 +279,11 @@ public class ResourceManager : MonoBehaviour
     {
         switch (objectType)
         {
-            case ObjectType.Road:
-                return roadPrefab;
+            case ObjectType.TransitionRoad:
+                return transitionRoadPrefab;
+
+            case ObjectType.StraightRoad:
+                return straightRoadPrefab;
 
             case ObjectType.Arch1:
                 return arch1Prefab;

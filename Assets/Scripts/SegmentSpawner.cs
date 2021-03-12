@@ -12,7 +12,10 @@ public class SegmentSpawner : MonoBehaviour
     [SerializeField] float archSpacing = 3;
     [SerializeField] float coinSpacing = 4;
 
+    private Vector3 spawnPositionOffset;
     private int numSegmentsSpawned = 0;
+    private int numTransitionsSpawned = 0;
+    private int numCheckpointsSpawned = 0;
     private bool isSpawning;
 
     private GameManager gameManager;
@@ -40,6 +43,7 @@ public class SegmentSpawner : MonoBehaviour
         }
 
         isSpawning = true;
+        SpawnSegments();
     }
 
     void Update()
@@ -49,65 +53,104 @@ public class SegmentSpawner : MonoBehaviour
             return;
         }
 
-        // TODO: This shouldn't be here
-        // The spawner should be notified when and what and where to spawn by the game session, maybe?
         Vector3 playerCurrentPosition = vehiclePhysicsController.transform.position;
 
-        // TODO: This shouldn't be done here, but it's the most convenient place for now
-        // because it is where segment length is defined
+        // TODO: This shouldn't be done here and isn't accurate
+        // Should use colliders to indicate cleared towers
         int numSegmentsCleared = (int)((playerCurrentPosition.z - startSpawnPosition.z) / segmentLength);
         gameManager.SetTowers(numSegmentsCleared);
 
         if (isSpawning)
         {
-            Vector3 nextSegmentPosition = startSpawnPosition + Vector3.forward * numSegmentsSpawned * segmentLength;
-
-            if (nextSegmentPosition.z - spawnAheadDistance < playerCurrentPosition.z)
-            {
-                SpawnSegment(nextSegmentPosition);
-            }
+            SpawnSegments();
         }
     }
 
-    void SpawnSegment(Vector3 segmentPosition)
+    private Vector3 GetNextSegmentPosition()
     {
-        // Difficulty progression (for example)
-        // - level 1, towers are simple, with single depth
-        // - level 2, towers are simple, with multiple depth
-        // - level 3, towers can be extra tall, but must have a gap on the bottom layer
-        // - level 4, towers can have gaps anywhere, with single depth
-        // - level 5, towers can have gaps anywhere, with multiple depth
-        // - level 6, lighting changes to make it harder to see
-        // - level 7, speed increases (might need to affect other things like segment length, gap height, etc.)
+        return startSpawnPosition + spawnPositionOffset + Vector3.forward * numSegmentsSpawned * segmentLength;
+    }
 
+    private void SpawnSegments()
+    {
+        Vector3 playerCurrentPosition = vehiclePhysicsController.transform.position;
+
+        while (GetNextSegmentPosition().z - spawnAheadDistance < playerCurrentPosition.z)
+        {
+            SpawnNextSegment();
+        }
+    }
+
+    private void SpawnNextSegment()
+    {
         int difficultyLevel = GetDifficultyLevel();
 
-        SpawnRoad(difficultyLevel, segmentPosition);
-        SpawnBuildings(difficultyLevel, segmentPosition);
-
-        if (numSegmentsSpawned > 0)
+        if (numSegmentsSpawned == 0)
         {
-            if (numSegmentsSpawned % 5 == 0)
-            {
-                SpawnCheckpoint(difficultyLevel, segmentPosition);
-            }
-            else
-            {
-                SpawnTowers(difficultyLevel, segmentPosition);
-                //SpawnCoins(segmentPosition);
-            }
+            SpawnStartSegment(difficultyLevel, GetNextSegmentPosition());
+            SpawnTowerSegment(difficultyLevel, GetNextSegmentPosition());
         }
+        else 
+        {
+            int numTowersSpawned = numSegmentsSpawned - numCheckpointsSpawned - numTransitionsSpawned - 1;
+            if (numTowersSpawned % 5 == 0)
+            {
+                SpawnCheckpointSegment(difficultyLevel, GetNextSegmentPosition());
+                SpawnTransitionSegment(difficultyLevel, GetNextSegmentPosition());
+            }
+
+            SpawnTowerSegment(difficultyLevel, GetNextSegmentPosition());
+        }
+    }
+
+    private void SpawnStartSegment(int difficultyLevel, Vector3 segmentPosition)
+    {
+        SpawnStraightRoad(difficultyLevel, segmentPosition);
 
         numSegmentsSpawned++;
     }
 
-    void SpawnRoad(int difficultyLevel, Vector3 segmentPosition)
+    private void SpawnCheckpointSegment(int difficultyLevel, Vector3 segmentPosition)
     {
-        GameObject road = resourceManager.GetOrCreateRoad();
+        SpawnStraightRoad(difficultyLevel, segmentPosition);
+        SpawnCheckpoint(difficultyLevel, segmentPosition);
+
+        numSegmentsSpawned++;
+    }
+
+    private void SpawnTransitionSegment(int difficultyLevel, Vector3 segmentPosition)
+    {
+        SpawnTransitionRoad(difficultyLevel, segmentPosition);
+
+        // Adjust spawn position
+        spawnPositionOffset += Vector3.up * 5;
+
+        numSegmentsSpawned++;
+    }
+
+    private void SpawnTowerSegment(int difficultyLevel, Vector3 segmentPosition)
+    {
+        SpawnStraightRoad(difficultyLevel, segmentPosition);
+        SpawnBuildings(difficultyLevel, segmentPosition);
+        SpawnTowers(difficultyLevel, segmentPosition);
+        //SpawnCoins(segmentPosition);
+
+        numSegmentsSpawned++;
+    }
+
+    private void SpawnStraightRoad(int difficultyLevel, Vector3 segmentPosition)
+    {
+        GameObject road = resourceManager.GetOrCreateStraightRoad();
         road.transform.position = segmentPosition;
     }
 
-    void SpawnBuildings(int difficultyLevel, Vector3 segmentPosition)
+    private void SpawnTransitionRoad(int difficultyLevel, Vector3 segmentPosition)
+    {
+        GameObject road = resourceManager.GetOrCreateTransitionRoad();
+        road.transform.position = segmentPosition;
+    }
+
+    private void SpawnBuildings(int difficultyLevel, Vector3 segmentPosition)
     {
         const int numBuildings = 5;
         const float buildingWidth = 8;
@@ -125,14 +168,23 @@ public class SegmentSpawner : MonoBehaviour
         }
     }
 
-    void SpawnCheckpoint(int difficultyLevel, Vector3 segmentPosition)
+    private void SpawnCheckpoint(int difficultyLevel, Vector3 segmentPosition)
     {
         GameObject checkpoint = resourceManager.GetOrCreateCheckpoint();
         checkpoint.transform.position = segmentPosition;
     }
 
-    void SpawnTowers(int difficultyLevel, Vector3 segmentPosition)
+    private void SpawnTowers(int difficultyLevel, Vector3 segmentPosition)
     {
+        // Difficulty progression (for example)
+        // - level 1, towers are simple, with single depth
+        // - level 2, towers are simple, with multiple depth
+        // - level 3, towers can be extra tall, but must have a gap on the bottom layer
+        // - level 4, towers can have gaps anywhere, with single depth
+        // - level 5, towers can have gaps anywhere, with multiple depth
+        // - level 6, lighting changes to make it harder to see
+        // - level 7, speed increases (might need to affect other things like segment length, gap height, etc.)
+
         int towerType = 0;
 
         if (difficultyLevel < 3)
