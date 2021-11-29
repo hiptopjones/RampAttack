@@ -14,9 +14,11 @@ public class SegmentSpawner : MonoBehaviour
 
     private Vector3 spawnPositionOffset;
     private int numSegmentsSpawned = 0;
-    private int numTransitionsSpawned = 0;
-    private int numCheckpointsSpawned = 0;
+    private int currentLevelIndex;
+    private int currentLevelSegmentIndex;
+
     private bool isSpawning;
+
 
     private GameManager gameManager;
     private ResourceManager resourceManager;
@@ -83,44 +85,47 @@ public class SegmentSpawner : MonoBehaviour
 
     private void SpawnNextSegment()
     {
-        int difficultyLevel = GetDifficultyLevel();
-
         if (numSegmentsSpawned == 0)
         {
-            SpawnStartSegment(difficultyLevel, GetNextSegmentPosition());
-            SpawnTowerSegment(difficultyLevel, GetNextSegmentPosition());
+            currentLevelIndex = 0;
+
+            SpawnStartSegment(currentLevelIndex, GetNextSegmentPosition());
         }
         else 
         {
-            int numTowersSpawned = numSegmentsSpawned - numCheckpointsSpawned - numTransitionsSpawned - 1;
-            if (numTowersSpawned % 5 == 0)
+            if (currentLevelSegmentIndex >= 5)
             {
-                SpawnCheckpointSegment(difficultyLevel, GetNextSegmentPosition());
-                SpawnTransitionSegment(difficultyLevel, GetNextSegmentPosition());
+                SpawnCheckpointSegment(currentLevelIndex, GetNextSegmentPosition());
+                SpawnTransitionSegment(currentLevelIndex, GetNextSegmentPosition());
+
+                currentLevelIndex++;
+                currentLevelSegmentIndex = 0;
             }
 
-            SpawnTowerSegment(difficultyLevel, GetNextSegmentPosition());
+            SpawnTowerSegment(currentLevelIndex, currentLevelSegmentIndex, GetNextSegmentPosition());
+
+            currentLevelSegmentIndex++;
         }
     }
 
-    private void SpawnStartSegment(int difficultyLevel, Vector3 segmentPosition)
+    private void SpawnStartSegment(int levelIndex, Vector3 segmentPosition)
     {
-        SpawnStraightRoad(difficultyLevel, segmentPosition);
+        SpawnStraightRoad(levelIndex, segmentPosition);
 
         numSegmentsSpawned++;
     }
 
-    private void SpawnCheckpointSegment(int difficultyLevel, Vector3 segmentPosition)
+    private void SpawnCheckpointSegment(int levelIndex, Vector3 segmentPosition)
     {
-        SpawnStraightRoad(difficultyLevel, segmentPosition);
-        SpawnCheckpoint(difficultyLevel, segmentPosition);
+        SpawnStraightRoad(levelIndex, segmentPosition);
+        SpawnCheckpoint(levelIndex, segmentPosition);
 
         numSegmentsSpawned++;
     }
 
-    private void SpawnTransitionSegment(int difficultyLevel, Vector3 segmentPosition)
+    private void SpawnTransitionSegment(int levelIndex, Vector3 segmentPosition)
     {
-        SpawnTransitionRoad(difficultyLevel, segmentPosition);
+        SpawnTransitionRoad(levelIndex, segmentPosition);
 
         // Adjust spawn position
         spawnPositionOffset += Vector3.up * 5;
@@ -128,29 +133,28 @@ public class SegmentSpawner : MonoBehaviour
         numSegmentsSpawned++;
     }
 
-    private void SpawnTowerSegment(int difficultyLevel, Vector3 segmentPosition)
+    private void SpawnTowerSegment(int levelIndex, int levelSegmentIndex, Vector3 segmentPosition)
     {
-        SpawnStraightRoad(difficultyLevel, segmentPosition);
-        SpawnBuildings(difficultyLevel, segmentPosition);
-        SpawnTowers(difficultyLevel, segmentPosition);
-        //SpawnCoins(segmentPosition);
+        SpawnStraightRoad(levelIndex, segmentPosition);
+        SpawnBuildings(levelIndex, segmentPosition);
+        SpawnTowers(levelIndex, levelSegmentIndex, segmentPosition);
 
         numSegmentsSpawned++;
     }
 
-    private void SpawnStraightRoad(int difficultyLevel, Vector3 segmentPosition)
+    private void SpawnStraightRoad(int levelIndex, Vector3 segmentPosition)
     {
         GameObject road = resourceManager.GetOrCreateStraightRoad();
         road.transform.position = segmentPosition;
     }
 
-    private void SpawnTransitionRoad(int difficultyLevel, Vector3 segmentPosition)
+    private void SpawnTransitionRoad(int levelIndex, Vector3 segmentPosition)
     {
         GameObject road = resourceManager.GetOrCreateTransitionRoad();
         road.transform.position = segmentPosition;
     }
 
-    private void SpawnBuildings(int difficultyLevel, Vector3 segmentPosition)
+    private void SpawnBuildings(int levelIndex, Vector3 segmentPosition)
     {
         const int numBuildings = 5;
         const float buildingWidth = 8;
@@ -168,13 +172,119 @@ public class SegmentSpawner : MonoBehaviour
         }
     }
 
-    private void SpawnCheckpoint(int difficultyLevel, Vector3 segmentPosition)
+    private void SpawnCheckpoint(int levelIndex, Vector3 segmentPosition)
     {
         GameObject checkpoint = resourceManager.GetOrCreateCheckpoint();
         checkpoint.transform.position = segmentPosition;
     }
 
-    private void SpawnTowers(int difficultyLevel, Vector3 segmentPosition)
+    // Difficulty progression (for example)
+    // - level 1, towers are simple, with single depth
+    // - level 2, towers are simple, with multiple depth
+    // - level 3, towers can be extra tall, but must have a gap on the bottom layer
+    // - level 4, towers can have gaps anywhere, with single depth
+    // - level 5, towers can have gaps anywhere, with multiple depth
+    // - level 6, lighting changes to make it harder to see
+    // - level 7, speed increases (might need to affect other things like segment length, gap height, etc.)
+    private string[] towerSequences = new[]
+    {
+        // Level 1
+        "1-3",
+        "1-33",
+        "1-333",
+        "1-333",
+        "1-33",
+
+        // Level 2
+        "3-3",
+        "2-33",
+        "1-333",
+        "2-333",
+        "3-33",
+
+        // Level 3
+        "1-3",
+        "3-33",
+        "1-2333",
+        "1-333",
+        "4-33",
+
+        // Level 4
+        "1-33",
+        "1-3123",
+        "1-333",
+        "1-13112",
+        "4-33",
+
+        // Level 5
+        "1-333",
+        "2-3123",
+        "4-33",
+        "2-33112",
+        "1-3",
+
+        // Level 6
+        "1-23112",
+        "2-3122",
+        "3-333",
+        "3-33112",
+        "1-333123",
+
+        // Level 7
+        "1-123",
+        "1-3123",
+        "5-3",
+        "4-32",
+        "1-3312",
+    };
+
+    private void SpawnTowers(int levelIndex, int levelSegmentIndex, Vector3 segmentPosition)
+    {
+        int sequenceIndex = levelIndex * 5 + levelSegmentIndex;
+        if (sequenceIndex >= towerSequences.Length)
+        {
+            sequenceIndex = Random.Range(0, towerSequences.Length - 1);
+        }
+
+        SpawnTowerSequence(segmentPosition, towerSequences[sequenceIndex]);
+    }
+
+    void SpawnTowerSequence(Vector3 spawnPosition, string code)
+    {
+        int numTowers = code[0] - '0'; // Convert char to int
+        code = code.Substring(2);
+
+        for (int i = 0; i < numTowers; i++)
+        {
+            for (int j = 0; j < code.Length; j++)
+            {
+                char c = code[j];
+
+                GameObject arch;
+                switch (c)
+                {
+                    case '1':
+                        arch = resourceManager.GetOrCreateArch1();
+                        break;
+
+                    case '2':
+                        arch = resourceManager.GetOrCreateArch2();
+                        break;
+
+                    case '3':
+                        arch = resourceManager.GetOrCreateArch3();
+                        break;
+
+                    default:
+                        throw new System.Exception("Invalid code input: '" + code + "'");
+                }
+
+                arch.transform.position = spawnPosition + (j * archHeight * Vector3.up) + (i * archSpacing * Vector3.forward);
+            }
+        }
+    }
+
+    private void Ignore(int difficultyLevel, Vector3 segmentPosition)
     {
         // Difficulty progression (for example)
         // - level 1, towers are simple, with single depth
@@ -344,6 +454,7 @@ public class SegmentSpawner : MonoBehaviour
             coin.transform.position = segmentPosition + new Vector3(0, 0, z);
 
             // Ensure coin animations remain synchronized
+            // TODO: Use a single rotation for all coins to keep them ALL synchronized
             coin.transform.rotation = Quaternion.identity;
         }
     }

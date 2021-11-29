@@ -5,8 +5,6 @@ using TMPro;
 
 public class CoinDisplay : MonoBehaviour
 {
-    [SerializeField] bool isBest;
-
     private TextMeshProUGUI coinText;
     private GameManager gameManager;
 
@@ -29,6 +27,6 @@ public class CoinDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        coinText.text = isBest ? gameManager.GetBestCoins().ToString(): gameManager.GetCurrentCoins().ToString();
+        coinText.text = gameManager.GetCurrentCoins().ToString();
     }
 }

@@ -5,6 +5,8 @@ using TMPro;
 
 public class PauseManager : MonoBehaviour
 {
+    private float savedTimeScale;
+
     private SceneLoader sceneLoader;
 
     void Start()
@@ -18,7 +20,20 @@ public class PauseManager : MonoBehaviour
 
     void Update()
     {
-        // TODO: Should just pause the game, not end it
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (savedTimeScale == 0)
+            {
+                savedTimeScale = Time.timeScale;
+                Time.timeScale = 0;
+            }
+            else
+            {
+                Time.timeScale = savedTimeScale;
+                savedTimeScale = 0;
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             sceneLoader.LoadGameOver();

@@ -53,6 +53,7 @@ public class ResourceManager : MonoBehaviour
             throw new System.Exception($"Unable to find object of type {nameof(VehiclePhysicsController)}");
         }
 
+        // TODO: Move out of Start() to avoid NRE from spawner
         activeObjects[ObjectType.StraightRoad] = new HashSet<GameObject>();
         activeObjects[ObjectType.TransitionRoad] = new HashSet<GameObject>();
         activeObjects[ObjectType.Arch1] = new HashSet<GameObject>();

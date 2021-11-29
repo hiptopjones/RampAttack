@@ -19,10 +19,14 @@ public class TrickManager : MonoBehaviour
     private int currentKeyComboIndex;
     private KeyCode[] keyCombo;
 
+    // Use level index to get progressively harder combos
     private KeyCode[][] keyCombos = new[]
     {
         new [] {KeyCode.LeftArrow, KeyCode.RightArrow },
         new [] {KeyCode.UpArrow, KeyCode.DownArrow },
+        //new [] {KeyCode.UpArrow, KeyCode.UpArrow, KeyCode.UpArrow },
+        //new [] {KeyCode.RightArrow, KeyCode.UpArrow, KeyCode.LeftArrow },
+        //new [] {KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow },
         new [] {KeyCode.LeftArrow, KeyCode.UpArrow, KeyCode.RightArrow },
         new [] {KeyCode.LeftArrow, KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow }
     };
